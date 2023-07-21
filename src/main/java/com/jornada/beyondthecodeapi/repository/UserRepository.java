@@ -87,45 +87,27 @@ public class UserRepository {
         return listaUsuarios;
     }
     public boolean editar(User user) {
-        String sql = "UPDATE usuario SET ";
         Connection connection = null;
         try {
             // abrir conexao
             connection = ConexaoDB.getConnection();
 
             // update
-            if (user.getName() != null) {
-                sql = "UPDATE usuario SET nome = ? WHERE id_user = ?";
+                String sql = "UPDATE usuario SET " +
+                        " nome = ?, " +
+                        " email = ?, " +
+                        " senha = ? " +
+                        " WHERE id_user = ?";
 
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, user.getName());
-                preparedStatement.setInt(2, user.getId());
-                //executar
-                int resultado = preparedStatement.executeUpdate();
-                return resultado > 0;
-            }
-            if (user.getEmail() != null) {
-                sql = "UPDATE usuario SET email = ? WHERE id_user = ?";
-
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, user.getEmail());
-                preparedStatement.setInt(2, user.getId());
-                //executar
-                int resultado = preparedStatement.executeUpdate();
-                return resultado > 0;
-            }
-            if (user.getPassword() != null) {
-                sql = "UPDATE usuario SET senha = ? WHERE id_user = ?";
-
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, user.getPassword());
                 preparedStatement.setInt(2, user.getId());
                 //executar
                 int resultado = preparedStatement.executeUpdate();
                 return resultado > 0;
-            }
-
-            return false;
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {

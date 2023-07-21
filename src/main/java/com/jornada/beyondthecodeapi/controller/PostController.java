@@ -36,7 +36,7 @@ public class PostController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @GetMapping
-    public List<PostDTO> retornarTodosOsUsuarios(){
+    public List<PostDTO> retornarTodosOsPosts(){
         return postService.listar();
     }
 
@@ -47,7 +47,7 @@ public class PostController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PutMapping
-    public boolean atualizarVendedor(@RequestBody PostDTO post) throws RegraDeNegocioException {
+    public boolean atualizarPost(@RequestBody PostDTO post) throws RegraDeNegocioException {
         return postService.editar(post);
     }
 
@@ -57,8 +57,8 @@ public class PostController {
             @ApiResponse(responseCode = "400",description = "Erro na validação de dados"),
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
-    @DeleteMapping("/{idVendedor}")
-    public boolean remover(@PathVariable("idVendedor") Integer id){
+    @DeleteMapping("/{idPost}")
+    public boolean remover(@PathVariable("idPost") Integer id){
         return postService.excluir(id);
     }
 }

@@ -30,7 +30,8 @@ public class PostService {
         return postRepository.editar(postConvertido);
     }
     public List<PostDTO> listar() {
-        return this.postRepository.listar().stream().map(entidade -> postMapper.converterParaDTO(entidade))
+        return this.postRepository.listar().stream()
+                .map(entidade -> postMapper.converterParaDTO(entidade))
                 .toList();
     }
 

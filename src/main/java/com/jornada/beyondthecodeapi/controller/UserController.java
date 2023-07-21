@@ -23,7 +23,7 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PostMapping
-    public UserDTO inserirVendedor(@RequestBody UserDTO user) throws RegraDeNegocioException {
+    public UserDTO inserirUsuario(@RequestBody UserDTO user) throws RegraDeNegocioException {
         return userService.salvarUser(user);
     }
 
@@ -44,7 +44,7 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PutMapping
-    public boolean atualizarVendedor(@RequestBody UserDTO user) throws RegraDeNegocioException {
+    public boolean atualizarUsuario(@RequestBody UserDTO user) throws RegraDeNegocioException {
         return userService.editar(user);
     }
 
@@ -54,8 +54,8 @@ public class UserController {
             @ApiResponse(responseCode = "400",description = "Erro na validação de dados"),
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
-    @DeleteMapping("/{idVendedor}")
-    public boolean remover(@PathVariable("idVendedor") Integer id){
+    @DeleteMapping("/{id}")
+    public boolean remover(@PathVariable("id") Integer id){
         return userService.excluir(id);
     }
 }
