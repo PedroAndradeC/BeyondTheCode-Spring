@@ -9,14 +9,17 @@ import lombok.Data;
 
 @Data
 public class PostDTO {
-    @Schema(description = "Colocar Conteudo do Post", example = "Lorem Ipsum Sit Dolor Amet")
-    @NotBlank
-    @NotNull
-    private String contents;
+    @Schema(description = "Qualquer ID genérico", example = "1")
+    @Positive
+    private Integer idPost;
     @Schema(description = "Colocar titulo do Post", example = "Lorem Ipsum Sit Dolor Amet")
     @NotBlank
     @NotNull
     private String title;
-    @Positive
-    private Integer idPost;
+
+    @Schema(description = "Colocar Conteudo do Post", example = "Lorem Ipsum Sit Dolor Amet")
+    @NotBlank
+    @NotNull
+    private String contents;
+
 }

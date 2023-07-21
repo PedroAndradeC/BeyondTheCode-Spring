@@ -2,7 +2,7 @@ package com.jornada.beyondthecodeapi.service;
 
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.entity.Post;
-import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
+import com.jornada.beyondthecodeapi.mapper.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.PostMapper;
 import com.jornada.beyondthecodeapi.repository.PostRepository;
 import lombok.RequiredArgsConstructor;

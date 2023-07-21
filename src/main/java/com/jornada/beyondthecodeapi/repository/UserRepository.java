@@ -99,12 +99,12 @@ public class UserRepository {
                         " senha = ? " +
                         " WHERE id_user = ?";
 
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, user.getName());
-                preparedStatement.setString(1, user.getEmail());
-                preparedStatement.setString(1, user.getPassword());
-                preparedStatement.setInt(2, user.getId());
+                preparedStatement.setString(2, user.getEmail());
+                preparedStatement.setString(3, user.getPassword());
+                preparedStatement.setInt(4, user.getId());
+
                 //executar
                 int resultado = preparedStatement.executeUpdate();
                 return resultado > 0;

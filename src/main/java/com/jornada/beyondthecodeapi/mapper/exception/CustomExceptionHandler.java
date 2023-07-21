@@ -1,4 +1,4 @@
-package com.jornada.beyondthecodeapi.exception;
+package com.jornada.beyondthecodeapi.mapper.exception;
 
 import com.jornada.beyondthecodeapi.dto.ErrorDTO;
 import org.springframework.http.HttpHeaders;

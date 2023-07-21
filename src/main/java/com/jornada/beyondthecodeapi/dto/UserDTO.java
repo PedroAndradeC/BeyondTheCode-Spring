@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class UserDTO {
     @Positive
+    @Schema(description = "Qualquer ID genérico", example = "1")
     private Integer id;
     @Schema(description = "Colocar e-mail do usuário", example = "Jefte@gmail.com")
     @NotBlank

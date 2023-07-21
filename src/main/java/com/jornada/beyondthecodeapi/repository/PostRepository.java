@@ -25,7 +25,7 @@ public class PostRepository {
                 proximoId = retorno.getInt("proxval");
             }
 
-            String sql = "INSERT INTO JORNADA1.POST (ID_POST,TITULO,CONTEUDO) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO JORNADA.POST (ID_POST,TITULO,CONTEUDO) VALUES (?, ?, ?)";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, proximoId);
@@ -89,8 +89,19 @@ public class PostRepository {
             connection = ConexaoDB.getConnection();
 
             //Código vai aqui
+            String sql = "UPDATE post SET " +
+                    " titulo = ?, " +
+                    " conteudo = ? " +
+                    " WHERE id_post = ?";
 
-            return false;
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, post.getTitle());
+            preparedStatement.setString(2, post.getContents());
+            preparedStatement.setInt(3, post.getIdPost());
+
+            //executar
+            int resultado = preparedStatement.executeUpdate();
+            return resultado > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -133,6 +144,7 @@ public class PostRepository {
         }
         return false;
     }
+    /*
     public int buscarPostID() {
         Connection connection = null;
         try {
@@ -167,5 +179,6 @@ public class PostRepository {
         }
 
         return 0;
-    }
+    }*/
+
 }

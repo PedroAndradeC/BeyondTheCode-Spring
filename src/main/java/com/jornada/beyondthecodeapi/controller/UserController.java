@@ -1,11 +1,12 @@
 package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.UserDTO;
-import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
+import com.jornada.beyondthecodeapi.mapper.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PostMapping
-    public UserDTO inserirUsuario(@RequestBody UserDTO user) throws RegraDeNegocioException {
+    public UserDTO inserirUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
         return userService.salvarUser(user);
     }
 
@@ -44,7 +45,7 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PutMapping
-    public boolean atualizarUsuario(@RequestBody UserDTO user) throws RegraDeNegocioException {
+    public boolean atualizarUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
         return userService.editar(user);
     }
 

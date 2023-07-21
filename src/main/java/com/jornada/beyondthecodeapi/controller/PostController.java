@@ -1,13 +1,12 @@
 package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.PostDTO;
-import com.jornada.beyondthecodeapi.dto.UserDTO;
-import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
+import com.jornada.beyondthecodeapi.mapper.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.PostService;
-import com.jornada.beyondthecodeapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class PostController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PostMapping
-    public PostDTO inserirPost(@RequestBody PostDTO post) throws RegraDeNegocioException{
+    public PostDTO inserirPost(@RequestBody @Valid PostDTO post) throws RegraDeNegocioException{
         return postService.salvarPost(post);
     }
 
@@ -47,7 +46,7 @@ public class PostController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PutMapping
-    public boolean atualizarPost(@RequestBody PostDTO post) throws RegraDeNegocioException {
+    public boolean atualizarPost(@RequestBody @Valid PostDTO post) throws RegraDeNegocioException {
         return postService.editar(post);
     }
 
