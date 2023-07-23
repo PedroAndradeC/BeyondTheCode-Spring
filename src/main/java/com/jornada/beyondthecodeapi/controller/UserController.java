@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Controller
 public class UserController {
     private final UserService userService;
+
     @Operation(summary = "Insere novo Usuário", description = "Este processo realiza a inserção de novo Usuário")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "Deu certo!"),
@@ -27,6 +30,24 @@ public class UserController {
     public UserDTO inserirUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
         return userService.salvarUser(user);
     }
+
+    @PostMapping("/login")
+    public UserDTO loginUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
+        // Verifica se os campos (email e senha) foram preenchidos
+        if (user.getEmail() == null || user.getPassword() == null) {
+            throw new RegraDeNegocioException("E-mail e senha são obrigatórios para o login.");
+        }
+
+        // autenticação q verifica se o usuário existe e a senha está correta
+        UserDTO authenticatedUser = userService.autenticar(user.getEmail(), user.getPassword());
+
+        if (authenticatedUser == null) {
+            throw new RegraDeNegocioException("Usuário não encontrado ou senha incorreta.");
+        }
+
+        return authenticatedUser;
+    }
+
 
     @Operation(summary = "Retorna todos os usuários", description = "Este processo retorna todos os usuários")
     @ApiResponses(value = {
