@@ -17,6 +17,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserDTO salvarUser(UserDTO user) throws RegraDeNegocioException {
+        validarUser(user);
         User userConvertido;
         User userSalvo;
 
@@ -40,22 +41,29 @@ public class UserService {
         loginRequest.setEmail(email);
         loginRequest.setPassword(password);
 
-        UserDTO authenticatedUser = loginUser(loginRequest);
+        UserDTO autenticarUser = loginUser(loginRequest);
 
-        if (authenticatedUser != null) {
-            return authenticatedUser; // Autenticação bem-sucedida, retorna o usuário autenticado
+        if (autenticarUser != null) {
+            return autenticarUser; // Autenticação bem-sucedida, retorna o usuário autenticado
         }
 
         return null; // Senha incorreta ou usuário não encontrado
     }
 
-    public boolean editar(UserDTO user) {
+    public boolean editar(UserDTO user) throws RegraDeNegocioException {
+        validarUser(user);
         User userConvertido = userMapper.converterParaEntity(user);
         return userRepository.editar(userConvertido);
     }
     public List<UserDTO> listar() {
         return this.userRepository.listar().stream().map(entidade -> userMapper.converterParaDTO(entidade))
                 .toList();
+    }
+
+    public void validarUser(UserDTO user) throws RegraDeNegocioException {
+        if (!user.getEmail().contains("@gmail") || !user.getEmail().contains("@hotmail")) {
+            throw new RegraDeNegocioException("Precisa ser @gmail ou @hotmail");
+        }
     }
 
     public boolean excluir(Integer id) {

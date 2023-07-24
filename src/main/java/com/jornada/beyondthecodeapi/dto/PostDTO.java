@@ -21,5 +21,8 @@ public class PostDTO {
     @NotBlank
     @NotNull
     private String contents;
+    @Schema(description = "Colocar usuário do Post")
+    @Positive
+    private Integer idUser;
 
 }

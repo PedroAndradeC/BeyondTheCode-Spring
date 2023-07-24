@@ -48,7 +48,6 @@ public class UserController {
         return authenticatedUser;
     }
 
-
     @Operation(summary = "Retorna todos os usuários", description = "Este processo retorna todos os usuários")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "Deu certo!"),

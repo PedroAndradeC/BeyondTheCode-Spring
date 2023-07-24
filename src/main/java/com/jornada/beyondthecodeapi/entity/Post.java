@@ -7,5 +7,5 @@ public class Post {
     private String contents;
     private String title;
     private Integer idPost;
-    private User user;
+    private Integer idUser;
 }

@@ -25,7 +25,9 @@ public class PostService {
         PostDTO postReturn = postMapper.converterParaDTO(postSalvo);
         return postReturn;
     }
-    public boolean editar(PostDTO post) {
+
+    public boolean editar(PostDTO post) throws RegraDeNegocioException {
+        autenticarPost(post);
         Post postConvertido = postMapper.converterParaEntity(post);
         return postRepository.editar(postConvertido);
     }
@@ -33,6 +35,20 @@ public class PostService {
         return this.postRepository.listar().stream()
                 .map(entidade -> postMapper.converterParaDTO(entidade))
                 .toList();
+    }
+
+    public PostDTO autenticarPost(PostDTO post) throws RegraDeNegocioException {
+        Post postConvertido;
+        int idUsuario;
+
+        postConvertido = postMapper.converterParaEntity(post);
+        idUsuario = postRepository.buscarPostID(postConvertido.getIdPost());
+        PostDTO postReturn = postMapper.converterParaDTO(postConvertido);
+        if (idUsuario == post.getIdUser()) {
+            throw new RegraDeNegocioException("Id inválido");
+        } else {
+            throw new RegraDeNegocioException("Id Correto");
+        }
     }
 
     public boolean excluir(Integer id) {
