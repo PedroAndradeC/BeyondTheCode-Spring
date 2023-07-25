@@ -1,4 +1,4 @@
-package com.jornada.beyondthecodeapi.mapper.exception;
+package com.jornada.beyondthecodeapi.exception;
 
 public class RegraDeNegocioException extends Exception{
     public RegraDeNegocioException(String message){

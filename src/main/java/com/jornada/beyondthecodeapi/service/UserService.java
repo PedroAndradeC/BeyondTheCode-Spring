@@ -2,7 +2,7 @@ package com.jornada.beyondthecodeapi.service;
 
 import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.entity.User;
-import com.jornada.beyondthecodeapi.mapper.exception.RegraDeNegocioException;
+import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.UserMapper;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -16,12 +16,11 @@ public class PostDTO {
     @NotBlank
     @NotNull
     private String title;
-
     @Schema(description = "Colocar Conteudo do Post", example = "Lorem Ipsum Sit Dolor Amet")
     @NotBlank
     @NotNull
     private String contents;
-    @Schema(description = "Colocar usuário do Post")
+    @Schema(description = "Colocar ID do usuário do Post", example = "3")
     @Positive
     private Integer idUser;
 

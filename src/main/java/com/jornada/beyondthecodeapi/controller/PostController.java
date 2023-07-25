@@ -1,7 +1,7 @@
 package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.PostDTO;
-import com.jornada.beyondthecodeapi.mapper.exception.RegraDeNegocioException;
+import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,7 +57,7 @@ public class PostController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @DeleteMapping("/{idPost}")
-    public boolean remover(@PathVariable("idPost") Integer id){
-        return postService.excluir(id);
+    public boolean remover(@PathVariable("idPost") Integer idPost, Integer idUser) throws RegraDeNegocioException {
+        return postService.excluir(idPost,idUser);
     }
 }

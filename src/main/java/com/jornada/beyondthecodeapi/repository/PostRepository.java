@@ -25,7 +25,7 @@ public class PostRepository {
                 proximoId = retorno.getInt("proxval");
             }
 
-            String sql = "INSERT INTO JORNADA1.POST (ID_POST,TITULO,CONTEUDO, ID_USER) VALUES (?,?, ?, ?)";
+            String sql = "INSERT INTO JORNADA.POST (ID_POST,TITULO,CONTEUDO,ID_USER) VALUES (?,?,?,?)";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, proximoId);
@@ -67,6 +67,7 @@ public class PostRepository {
                 post.setIdPost(res.getInt("id_post"));
                 post.setTitle(res.getString("titulo"));
                 post.setContents(res.getString("conteudo"));
+                post.setIdUser(res.getInt("id_user"));
                 listaPost.add(post);
             }
         } catch (SQLException ex) {

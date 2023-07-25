@@ -1,7 +1,7 @@
 package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.UserDTO;
-import com.jornada.beyondthecodeapi.mapper.exception.RegraDeNegocioException;
+import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

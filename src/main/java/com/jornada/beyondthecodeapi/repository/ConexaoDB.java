@@ -18,7 +18,7 @@ public class ConexaoDB {
         Connection connection = DriverManager.getConnection(url, USER, PASS);
 
         // sempre usar o schema JORNADA
-        connection.createStatement().execute("alter session set current_schema=JORNADA1");
+        connection.createStatement().execute("alter session set current_schema=JORNADA");
 
         return connection;
     }

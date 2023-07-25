@@ -2,7 +2,7 @@ package com.jornada.beyondthecodeapi.service;
 
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.entity.Post;
-import com.jornada.beyondthecodeapi.mapper.exception.RegraDeNegocioException;
+import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.PostMapper;
 import com.jornada.beyondthecodeapi.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,13 +45,18 @@ public class PostService {
         idUsuario = postRepository.buscarPostID(postConvertido.getIdPost());
         PostDTO postReturn = postMapper.converterParaDTO(postConvertido);
         if (idUsuario == post.getIdUser()) {
-            throw new RegraDeNegocioException("Id inválido");
+            return post;
         } else {
-            throw new RegraDeNegocioException("Id Correto");
+            throw new RegraDeNegocioException("Id Inválido");
         }
     }
 
-    public boolean excluir(Integer id) {
-        return this.postRepository.excluir(id);
+    public boolean excluir(Integer idPost, Integer idUser) throws RegraDeNegocioException {
+        int idUsuario = postRepository.buscarPostID(idPost);
+        if(idUsuario == idUser){
+            return this.postRepository.excluir(idPost);
+        }else{
+            throw new RegraDeNegocioException("Usuário Inválido");
+        }
     }
 }
