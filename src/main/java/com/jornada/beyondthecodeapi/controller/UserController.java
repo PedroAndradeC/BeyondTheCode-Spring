@@ -2,12 +2,15 @@ package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
+import com.jornada.beyondthecodeapi.service.EmailService;
 import com.jornada.beyondthecodeapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class UserController {
+    @Value("${ambiente.api.nome}")
+    private String NomeApi;
     private final UserService userService;
+    private final EmailService emailService;
 
     @Operation(summary = "Insere novo Usuário", description = "Este processo realiza a inserção de novo Usuário")
     @ApiResponses(value = {
@@ -29,6 +35,10 @@ public class UserController {
     @PostMapping
     public UserDTO inserirUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
         return userService.salvarUser(user);
+    }
+    @PostMapping("/EnviarEmail")
+    public void Email(String para, String assunto, String texto) throws MessagingException {
+        this.emailService.enviarEmailComTemplate(para, assunto, texto);
     }
 
     @PostMapping("/login")

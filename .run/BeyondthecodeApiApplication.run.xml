@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="BeyondthecodeApiApplication" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="17" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="MAIN_CLASS_NAME" value="com.jornada.beyondthecodeapi.BeyondthecodeApiApplication" />
+    <module name="beyondthecode-api.main" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=prd -Dspring.mail.username=jefte.rodrigues@escola.pr.gov.br -Dspring.mail.password=doscijkqxlghyhmt" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
