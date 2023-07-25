@@ -13,6 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final EmailService emailService;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
@@ -21,6 +22,7 @@ public class UserService {
         User userConvertido;
         User userSalvo;
 
+        emailService.enviarEmailComTemplate(user.getEmail(), "Bem vindo ao BeyondTheCode",user.getName());
         userConvertido = userMapper.converterParaEntity(user);
         userSalvo = userRepository.salvarUserDB(userConvertido);
         UserDTO userReturn = userMapper.converterParaDTO(userSalvo);
@@ -62,8 +64,9 @@ public class UserService {
 
     public void validarUser(UserDTO user) throws RegraDeNegocioException {
         if (!user.getEmail().contains("@gmail") || !user.getEmail().contains("@hotmail")) {
-            throw new RegraDeNegocioException("Precisa ser @gmail ou @hotmail");
-        }
+        }else{
+        throw new RegraDeNegocioException("Precisa ser @gmail ou @hotmail");
+    }
     }
 
     public boolean excluir(Integer id) {

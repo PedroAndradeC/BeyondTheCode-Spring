@@ -68,7 +68,7 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(emailDestino);
             mimeMessageHelper.setSubject(assunto);
-            String email = gerarConteudoComTemplate("Teste", from);
+            String email = gerarConteudoComTemplate(texto, from);
             mimeMessageHelper.setText(email, true);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
