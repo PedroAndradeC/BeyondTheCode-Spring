@@ -22,7 +22,7 @@ public class UserService {
         User userConvertido;
         User userSalvo;
 
-        emailService.enviarEmailComTemplate(user.getEmail(), "Bem vindo ao BeyondTheCode",user.getName());
+        emailService.enviarEmailComTemplate(user.getEmail(), "Bem vindo ao BeyondTheCode",user.getNome());
         userConvertido = userMapper.converterParaEntity(user);
         userSalvo = userRepository.salvarUserDB(userConvertido);
         UserDTO userReturn = userMapper.converterParaDTO(userSalvo);
@@ -48,10 +48,10 @@ public class UserService {
         }
     }
 
-    public UserDTO autenticar(String email, String password) {
+    public UserDTO autenticar(String email, String senha) {
         UserDTO loginRequest = new UserDTO();
         loginRequest.setEmail(email);
-        loginRequest.setPassword(password);
+        loginRequest.setSenha(senha);
 
         UserDTO autenticarUser = loginUser(loginRequest);
 

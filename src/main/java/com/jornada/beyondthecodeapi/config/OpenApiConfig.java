@@ -17,8 +17,8 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("Cliente API")
-                        .description("descrição")
+                        .title("Beyond-the-Code API")
+                        .description("Rede social para desenvolvedores")
                         .version("v1.0.0")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org/")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))

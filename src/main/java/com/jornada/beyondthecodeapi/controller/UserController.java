@@ -60,12 +60,12 @@ public class UserController {
     @PostMapping("/login")
     public UserDTO loginUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
         // Verifica se os campos (email e senha) foram preenchidos
-        if (user.getEmail() == null || user.getPassword() == null) {
+        if (user.getEmail() == null || user.getSenha() == null) {
             throw new RegraDeNegocioException("E-mail e senha são obrigatórios para o login.");
         }
 
         // autenticação q verifica se o usuário existe e a senha está correta
-        UserDTO autenticarUser = userService.autenticar(user.getEmail(), user.getPassword());
+        UserDTO autenticarUser = userService.autenticar(user.getEmail(), user.getSenha());
 
         if (autenticarUser == null) {
             throw new RegraDeNegocioException("Usuário não encontrado ou senha incorreta.");

@@ -17,12 +17,12 @@ public class UserDTO {
     @Schema(description = "Colocar senha do usuário", example = "Senha-Segura")
     @NotBlank
     @NotNull
-    private String password;
+    private String senha;
     @Schema(description = "Nome Completo", example = "Fulano de Tal")
     @NotBlank
     @NotNull
     @Size(min = 3, max = 30, message = "Usuário deve conter entre 3 e 30 caracteres")
-    private String name;
+    private String nome;
 
 }
 
