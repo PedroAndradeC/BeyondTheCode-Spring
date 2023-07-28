@@ -46,7 +46,7 @@ public class EmailService {
         helper.setText(texto);
 
         // Forma 1
-        File file1 = new File("C:\\Users\\USER\\Desktop\\Projeto Spring\\BeyondTheCode-Spring\\src\\main\\resources\\pp.jpg");
+        File file1 = new File("C:\\temp\\Java_maicon\\BeyondTheCode-Spring\\src\\main\\resources\\Java.jpg");
         FileSystemResource file
                 = new FileSystemResource(file1);
         helper.addAttachment(file1.getName(), file);
@@ -59,7 +59,7 @@ public class EmailService {
 
         emailSender.send(message);
     }
-    public void enviarEmailComTemplate(String emailDestino, String assunto, String texto) {
+    public void enviarEmailComTemplate(String emailDestino, String assunto, String nome) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
@@ -68,8 +68,13 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(emailDestino);
             mimeMessageHelper.setSubject(assunto);
-            String email = gerarConteudoComTemplate(texto, from);
+            String email = gerarConteudoComTemplate(nome, from);
             mimeMessageHelper.setText(email, true);
+
+            File file1 = new File("C:\\temp\\Java_maicon\\BeyondTheCode-Spring\\src\\main\\resources\\Java.jpg");
+            FileSystemResource file
+                    = new FileSystemResource(file1);
+            mimeMessageHelper.addAttachment(file1.getName(), file);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException e) {

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
     private final PostService postService;
 
@@ -26,6 +28,7 @@ public class PostController {
     })
     @PostMapping
     public PostDTO inserirPost(@RequestBody @Valid PostDTO post) throws RegraDeNegocioException{
+        log.info("Post foi inserido");
         return postService.salvarPost(post);
     }
 

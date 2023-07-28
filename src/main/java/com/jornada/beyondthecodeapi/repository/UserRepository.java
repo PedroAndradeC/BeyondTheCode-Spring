@@ -93,21 +93,21 @@ public class UserRepository {
             connection = ConexaoDB.getConnection();
 
             // update
-                String sql = "UPDATE usuario SET " +
-                        " nome = ?, " +
-                        " email = ?, " +
-                        " senha = ? " +
-                        " WHERE id_user = ?";
+            String sql = "UPDATE usuario SET " +
+                    " nome = ?, " +
+                    " email = ?, " +
+                    " senha = ? " +
+                    " WHERE id_user = ?";
 
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, user.getName());
-                preparedStatement.setString(2, user.getEmail());
-                preparedStatement.setString(3, user.getPassword());
-                preparedStatement.setInt(4, user.getId());
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setInt(4, user.getId());
 
-                //executar
-                int resultado = preparedStatement.executeUpdate();
-                return resultado > 0;
+            //executar
+            int resultado = preparedStatement.executeUpdate();
+            return resultado > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -121,6 +121,51 @@ public class UserRepository {
             }
         }
         return false;
+    }
+
+    public User buscarUserPorId(int id) {
+        Connection connection = null;
+        try {
+            // Abrir conexão
+            connection = ConexaoDB.getConnection();
+
+            // Consulta SQL
+            String sql = "SELECT * FROM USUARIO WHERE id_user = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            // Executar consulta
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                // Extrair os dados do resultado
+                String nome = resultSet.getString("NOME");
+                String email = resultSet.getString("EMAIL");
+                String senha = resultSet.getString("SENHA");
+
+                // Criar um objeto User com os dados obtidos
+                User user = new User();
+                user.setId(id);
+                user.setName(nome);
+                user.setEmail(email);
+                user.setPassword(senha);
+
+                return user;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            // Fechar conexão
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return null; // Retorna null se nenhum usuário for encontrado com o ID informado
     }
 
     //Excluir

@@ -38,7 +38,17 @@ public class UserService {
             return null;
         }
     }
-     public UserDTO autenticar(String email, String password) {
+
+    public UserDTO idUser(UserDTO idUser) {
+        User userId = userRepository.buscarUserPorId(idUser.getCodigoUser());
+        if(userId != null) {
+            return userMapper.converterParaDTO(userId);
+        }else {
+            return null;
+        }
+    }
+
+    public UserDTO autenticar(String email, String password) {
         UserDTO loginRequest = new UserDTO();
         loginRequest.setEmail(email);
         loginRequest.setPassword(password);
@@ -63,13 +73,14 @@ public class UserService {
     }
 
     public void validarUser(UserDTO user) throws RegraDeNegocioException {
-        if (!user.getEmail().contains("@gmail") || !user.getEmail().contains("@hotmail")) {
+        if (user.getEmail().contains("@gmail") || user.getEmail().contains("@hotmail") || user.getEmail().contains("@outlook")) {
         }else{
-        throw new RegraDeNegocioException("Precisa ser @gmail ou @hotmail");
-    }
+            throw new RegraDeNegocioException("Precisa ser @gmail, @hotmail ou @outlook");
+        }
     }
 
     public boolean excluir(Integer id) {
         return this.userRepository.excluir(id);
     }
 }
+

@@ -8,12 +8,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
         //DTO para Entity
-//        @Mapping(source = "codigoUser", target = "id")
-//        @Mapping(source = "senha", target = "password")
+        @Mapping(source = "codigoUser", target = "id")
         User converterParaEntity(UserDTO dto);
 
         //Entity para DTO
-//        @Mapping(source = "id", target = "codigoUser")
-//        @Mapping(source = "password", target = "senha")
+        @Mapping(source = "id", target = "codigoUser")
         UserDTO converterParaDTO(User entity);
 }

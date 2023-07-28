@@ -14,14 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostMapper postMapper;
+    private final UserService userService;
     private final PostRepository postRepository;
 
     public PostDTO salvarPost(PostDTO post) throws RegraDeNegocioException {
-        Post postConvertido;
-        Post postSalvo;
 
-        postConvertido = postMapper.converterParaEntity(post);
-        postSalvo = postRepository.salvarPost(postConvertido);
+        Post postConvertido = postMapper.converterParaEntity(post);
+        Post postSalvo = postRepository.salvarPost(postConvertido);
         PostDTO postReturn = postMapper.converterParaDTO(postSalvo);
         return postReturn;
     }

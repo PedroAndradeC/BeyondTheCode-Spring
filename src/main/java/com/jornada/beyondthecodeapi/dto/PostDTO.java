@@ -11,7 +11,7 @@ import lombok.Data;
 public class PostDTO {
     @Schema(description = "Qualquer ID genérico", example = "1")
     @Positive
-    private Integer idPost;
+    private Integer codigoPost;
     @Schema(description = "Colocar titulo do Post", example = "Lorem Ipsum Sit Dolor Amet")
     @NotBlank
     @NotNull
@@ -25,3 +25,4 @@ public class PostDTO {
     private Integer idUser;
 
 }
+

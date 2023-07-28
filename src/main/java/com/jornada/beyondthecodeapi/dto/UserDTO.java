@@ -8,7 +8,7 @@ import lombok.Data;
 public class UserDTO {
     @Positive
     @Schema(description = "Qualquer ID genérico", example = "1")
-    private Integer id;
+    private Integer codigoUser;
     @Schema(description = "Colocar e-mail do usuário", example = "name@gmail.com")
     @NotBlank
     @NotNull
@@ -18,10 +18,11 @@ public class UserDTO {
     @NotBlank
     @NotNull
     private String password;
-    @Schema(description = "Nome Completo", example = "Jefte Gonçalves")
+    @Schema(description = "Nome Completo", example = "Fulano de Tal")
     @NotBlank
     @NotNull
     @Size(min = 3, max = 30, message = "Usuário deve conter entre 3 e 30 caracteres")
     private String name;
 
 }
+

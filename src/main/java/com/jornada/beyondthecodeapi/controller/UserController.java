@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Controller
+@Slf4j
 public class UserController {
     @Value("${ambiente.api.nome}")
     private String NomeApi;
@@ -34,13 +36,27 @@ public class UserController {
     })
     @PostMapping
     public UserDTO inserirUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
+        log.info("Usuario foi inserido");
         return userService.salvarUser(user);
     }
+
+    @Operation(summary = "Envia email para um Usuário", description = "Este processo realiza o envio de um email automático")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Deu certo!"),
+            @ApiResponse(responseCode = "400",description = "Erro na validação de dados"),
+            @ApiResponse(responseCode = "500",description = "Erro do servidor")
+    })
     @PostMapping("/EnviarEmail")
-    public void Email(String para, String assunto, String texto) throws MessagingException {
-        this.emailService.enviarEmailComTemplate(para, assunto, texto);
+    public void Email(String para, String assunto, String nome) throws MessagingException {
+        this.emailService.enviarEmailComTemplate(para, assunto, nome);
     }
 
+    @Operation(summary = "Realiza o login do Usuário", description = "Este processo realiza o login de Usuário já existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Deu certo!"),
+            @ApiResponse(responseCode = "400",description = "Erro na validação de dados"),
+            @ApiResponse(responseCode = "500",description = "Erro do servidor")
+    })
     @PostMapping("/login")
     public UserDTO loginUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
         // Verifica se os campos (email e senha) foram preenchidos
@@ -49,13 +65,13 @@ public class UserController {
         }
 
         // autenticação q verifica se o usuário existe e a senha está correta
-        UserDTO authenticatedUser = userService.autenticar(user.getEmail(), user.getPassword());
+        UserDTO autenticarUser = userService.autenticar(user.getEmail(), user.getPassword());
 
-        if (authenticatedUser == null) {
+        if (autenticarUser == null) {
             throw new RegraDeNegocioException("Usuário não encontrado ou senha incorreta.");
         }
 
-        return authenticatedUser;
+        return autenticarUser;
     }
 
     @Operation(summary = "Retorna todos os usuários", description = "Este processo retorna todos os usuários")
