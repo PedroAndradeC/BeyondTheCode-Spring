@@ -9,9 +9,9 @@ import org.mapstruct.Mapping;
 public interface PostMapper {
         //DTO para Entity
         @Mapping(source = "codigoPost",target = "idPost")
-        Post converterParaEntity(PostDTO dto);
+        Post toEntity(PostDTO dto);
 
         //Entity para DTO
         @Mapping(source = "idPost", target = "codigoPost")
-        PostDTO converterParaDTO(Post entity);
+        PostDTO toDTO(Post entity);
 }

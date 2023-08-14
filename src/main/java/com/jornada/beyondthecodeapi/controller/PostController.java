@@ -49,8 +49,8 @@ public class PostController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PutMapping
-    public boolean atualizarPost(@RequestBody @Valid PostDTO post) throws RegraDeNegocioException {
-        return postService.editar(post);
+    public PostDTO atualizarPost(@RequestBody @Valid PostDTO post) throws RegraDeNegocioException {
+        return postService.atualizarPost(post);
     }
 
     @Operation(summary = "Deleta Posts", description = "Deleta Posts na base de dados")
@@ -60,7 +60,10 @@ public class PostController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @DeleteMapping("/{idPost}")
-    public boolean remover(@PathVariable("idPost") Integer idPost, Integer idUser) throws RegraDeNegocioException {
-        return postService.excluir(idPost,idUser);
+    public void remover(@PathVariable("idPost") Integer id) {
+        postService.remover(id);
     }
+//    public boolean remover(@PathVariable("idPost") Integer idPost, Integer idUser) throws RegraDeNegocioException {
+//        return postService.remover(idPost,idUser);
+//    }
 }

@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,21 +60,24 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PostMapping("/login")
-    public UserDTO loginUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
-        // Verifica se os campos (email e senha) foram preenchidos
-        if (user.getEmail() == null || user.getSenha() == null) {
-            throw new RegraDeNegocioException("E-mail e senha são obrigatórios para o login.");
-        }
-
-        // autenticação q verifica se o usuário existe e a senha está correta
-        UserDTO autenticarUser = userService.autenticar(user.getEmail(), user.getSenha());
-
-        if (autenticarUser == null) {
-            throw new RegraDeNegocioException("Usuário não encontrado ou senha incorreta.");
-        }
-
-        return autenticarUser;
+    public ResponseEntity<Boolean> login(@RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(userService.loginUser(userDTO), HttpStatus.OK);
     }
+//    public UserDTO loginUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
+//        // Verifica se os campos (email e senha) foram preenchidos
+//        if (user.getEmail() == null || user.getSenha() == null) {
+//            throw new RegraDeNegocioException("E-mail e senha são obrigatórios para o login.");
+//        }
+//
+//        // autenticação q verifica se o usuário existe e a senha está correta
+//        UserDTO autenticarUser = userService.autenticar(user.getEmail(), user.getSenha());
+//
+//        if (autenticarUser == null) {
+//            throw new RegraDeNegocioException("Usuário não encontrado ou senha incorreta.");
+//        }
+//
+//        return autenticarUser;
+//    }
 
     @Operation(summary = "Retorna todos os usuários", description = "Este processo retorna todos os usuários")
     @ApiResponses(value = {
@@ -91,8 +96,18 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PutMapping
-    public boolean atualizarUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
-        return userService.editar(user);
+    public UserDTO atualizarUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
+        return userService.atualizarUser(user);
+    }
+
+    @Operation(summary = "Retorna um usuário por id", description = "Este processo retorna um usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Deu certo!"),
+            @ApiResponse(responseCode = "500",description = "Erro do servidor")
+    })
+    @GetMapping("/por-id")
+    public UserDTO buscarPorId(Integer id) throws RegraDeNegocioException {
+        return userService.idUser(id);
     }
 
     @Operation(summary = "Deleta usuarios", description = "Deleta usuarios na base de dados")
@@ -102,7 +117,7 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @DeleteMapping("/{id}")
-    public boolean remover(@PathVariable("id") Integer id){
-        return userService.excluir(id);
+    public void remover(@PathVariable("id") Integer id){
+        userService.remover(id);
     }
 }

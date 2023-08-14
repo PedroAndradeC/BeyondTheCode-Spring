@@ -17,59 +17,62 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
-    public UserDTO salvarUser(UserDTO user) throws RegraDeNegocioException {
-        validarUser(user);
-        User userConvertido;
-        User userSalvo;
-
-        emailService.enviarEmailComTemplate(user.getEmail(), "Bem vindo ao BeyondTheCode",user.getNome());
-        userConvertido = userMapper.converterParaEntity(user);
-        userSalvo = userRepository.salvarUserDB(userConvertido);
-        UserDTO userReturn = userMapper.converterParaDTO(userSalvo);
-        return userReturn;
+    public UserDTO salvarUser(UserDTO userDTO) throws RegraDeNegocioException {
+        validarUser(userDTO);
+        emailService.enviarEmailComTemplate(userDTO.getEmail(), "Bem vindo ao BeyondTheCode",userDTO.getNome());
+        User entidade = userMapper.toEntity(userDTO);
+        User salvo = userRepository.save(entidade);
+        UserDTO dtoSalvo = userMapper.toDTO(salvo);
+        return dtoSalvo;
     }
 
-    public UserDTO loginUser(UserDTO login) {
-
-        User userLogin = userRepository.buscarUsuarioPorEmail(login.getEmail());
-        if(userLogin != null) {
-            return userMapper.converterParaDTO(userLogin);
-        } else {
-            return null;
-        }
+    public UserDTO atualizarUser(UserDTO userDTO) throws RegraDeNegocioException {
+        validarUser(userDTO);
+        User entidade = userMapper.toEntity(userDTO);
+        User salvo = userRepository.save(entidade);
+        UserDTO dtoSalvo = userMapper.toDTO(salvo);
+        return dtoSalvo;
     }
 
-    public UserDTO idUser(UserDTO idUser) {
-        User userId = userRepository.buscarUserPorId(idUser.getCodigoUser());
-        if(userId != null) {
-            return userMapper.converterParaDTO(userId);
-        }else {
-            return null;
-        }
+    public boolean loginUser(UserDTO login) {
+
+        User userLogin = userRepository.findByEmail(login.getEmail());
+        return userLogin.getEmail().equals(login.getEmail()) && userLogin.getPassword().equals(login.getSenha());
+//        if(userLogin != null) {
+//            return userMapper.toDTO(userLogin);
+//        } else {
+//            return null;
+//        }
     }
 
-    public UserDTO autenticar(String email, String senha) {
-        UserDTO loginRequest = new UserDTO();
-        loginRequest.setEmail(email);
-        loginRequest.setSenha(senha);
-
-        UserDTO autenticarUser = loginUser(loginRequest);
-
-        if (autenticarUser != null) {
-            return autenticarUser; // Autenticação bem-sucedida, retorna o usuário autenticado
-        }
-
-        return null; // Senha incorreta ou usuário não encontrado
+    public UserDTO idUser(Integer id) throws RegraDeNegocioException {
+        User entity = buscarIdUser(id);
+        return userMapper.toDTO(entity);
     }
 
-    public boolean editar(UserDTO user) throws RegraDeNegocioException {
-        validarUser(user);
-        User userConvertido = userMapper.converterParaEntity(user);
-        return userRepository.editar(userConvertido);
+    //    public UserDTO autenticar(String email, String senha) {
+//        UserDTO loginRequest = new UserDTO();
+//        loginRequest.setEmail(email);
+//        loginRequest.setSenha(senha);
+//
+//        UserDTO autenticarUser = loginUser(loginRequest);
+//
+//        if (autenticarUser != null) {
+//            return autenticarUser; // Autenticação bem-sucedida, retorna o usuário autenticado
+//        }
+//
+//        return null; // Senha incorreta ou usuário não encontrado
+//    }
+
+    public User buscarIdUser(Integer id) throws RegraDeNegocioException {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não existe."));
     }
+
     public List<UserDTO> listar() {
-        return this.userRepository.listar().stream().map(entidade -> userMapper.converterParaDTO(entidade))
-                .toList();
+        List<User> listaUsers = userRepository.findAll();
+        List<UserDTO> dtos = listaUsers.stream().map(entity -> userMapper.toDTO(entity)).toList();
+        return dtos;
     }
 
     public void validarUser(UserDTO user) throws RegraDeNegocioException {
@@ -79,8 +82,8 @@ public class UserService {
         }
     }
 
-    public boolean excluir(Integer id) {
-        return this.userRepository.excluir(id);
+    public void remover(Integer id) {
+        userRepository.deleteById(id);
     }
 }
 

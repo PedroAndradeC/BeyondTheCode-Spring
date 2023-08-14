@@ -22,7 +22,7 @@ public class PostDTO {
     private String contents;
     @Schema(description = "Colocar ID do usuário do Post", example = "3")
     @Positive
-    private Integer idUser;
+    private UserDTO idUser;
 
 }
 
