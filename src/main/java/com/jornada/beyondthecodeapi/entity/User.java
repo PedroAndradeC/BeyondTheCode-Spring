@@ -26,6 +26,6 @@ public class User{
     private String email;
 
     // um user para muitos posts
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
     private Set<Post> posts;
 }

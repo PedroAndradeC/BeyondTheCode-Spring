@@ -60,24 +60,15 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(userService.loginUser(userDTO), HttpStatus.OK);
+    public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) throws RegraDeNegocioException {
+        try {
+            UserDTO loggedInUser = userService.loginUser(userDTO);
+            return new ResponseEntity<>(loggedInUser, HttpStatus.OK);
+        } catch (RegraDeNegocioException e) {
+            throw new RegraDeNegocioException("Senha e/ou email incorreto(s)");
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Status 401
+        }
     }
-//    public UserDTO loginUsuario(@RequestBody @Valid UserDTO user) throws RegraDeNegocioException {
-//        // Verifica se os campos (email e senha) foram preenchidos
-//        if (user.getEmail() == null || user.getSenha() == null) {
-//            throw new RegraDeNegocioException("E-mail e senha são obrigatórios para o login.");
-//        }
-//
-//        // autenticação q verifica se o usuário existe e a senha está correta
-//        UserDTO autenticarUser = userService.autenticar(user.getEmail(), user.getSenha());
-//
-//        if (autenticarUser == null) {
-//            throw new RegraDeNegocioException("Usuário não encontrado ou senha incorreta.");
-//        }
-//
-//        return autenticarUser;
-//    }
 
     @Operation(summary = "Retorna todos os usuários", description = "Este processo retorna todos os usuários")
     @ApiResponses(value = {

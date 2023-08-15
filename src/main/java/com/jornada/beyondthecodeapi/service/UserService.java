@@ -34,35 +34,20 @@ public class UserService {
         return dtoSalvo;
     }
 
-    public boolean loginUser(UserDTO login) {
-
+    public UserDTO loginUser(UserDTO login) throws RegraDeNegocioException {
         User userLogin = userRepository.findByEmail(login.getEmail());
-        return userLogin.getEmail().equals(login.getEmail()) && userLogin.getPassword().equals(login.getSenha());
-//        if(userLogin != null) {
-//            return userMapper.toDTO(userLogin);
-//        } else {
-//            return null;
-//        }
+
+        if (userLogin != null && userLogin.getPassword().equals(login.getSenha())) {
+            return userMapper.toDTO(userLogin);
+        } else {
+            throw new RegraDeNegocioException("Credenciais inválidas.");
+        }
     }
 
     public UserDTO idUser(Integer id) throws RegraDeNegocioException {
         User entity = buscarIdUser(id);
         return userMapper.toDTO(entity);
     }
-
-    //    public UserDTO autenticar(String email, String senha) {
-//        UserDTO loginRequest = new UserDTO();
-//        loginRequest.setEmail(email);
-//        loginRequest.setSenha(senha);
-//
-//        UserDTO autenticarUser = loginUser(loginRequest);
-//
-//        if (autenticarUser != null) {
-//            return autenticarUser; // Autenticação bem-sucedida, retorna o usuário autenticado
-//        }
-//
-//        return null; // Senha incorreta ou usuário não encontrado
-//    }
 
     public User buscarIdUser(Integer id) throws RegraDeNegocioException {
         return userRepository.findById(id)
