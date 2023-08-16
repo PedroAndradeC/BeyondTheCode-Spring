@@ -27,6 +27,7 @@ public class PostService {
         Post salvo = postRepository.save(entidade);
         PostDTO dtoSalvo = postMapper.toDTO(salvo);
         return dtoSalvo;
+
     }
 
     public PostDTO atualizarPost(PostDTO post) throws RegraDeNegocioException {
@@ -35,6 +36,7 @@ public class PostService {
         Post salvo = postRepository.save(entidade);
         PostDTO dtoSalvo = postMapper.toDTO(salvo);
         return dtoSalvo;
+
     }
 
     public List<PostDTO> listar() {

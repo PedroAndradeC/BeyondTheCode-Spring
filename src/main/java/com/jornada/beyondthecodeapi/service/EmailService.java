@@ -21,8 +21,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    private final JavaMailSender emailSender;
-    private final freemarker.template.Configuration fmConfiguration;
+    private JavaMailSender emailSender;
+    private freemarker.template.Configuration fmConfiguration;
     @Value("${spring.mail.username}")
     private String from;
     public void enviarEmailSimples (String emailDestino, String assunto, String texto){
@@ -71,10 +71,10 @@ public class EmailService {
             String email = gerarConteudoComTemplate(nome, from);
             mimeMessageHelper.setText(email, true);
 
-            File file1 = new File("C:\\temp\\Java_maicon\\BeyondTheCode-Spring\\src\\main\\resources\\Java.jpg");
-            FileSystemResource file
-                    = new FileSystemResource(file1);
-            mimeMessageHelper.addAttachment(file1.getName(), file);
+//            File file1 = new File("C:\\temp\\Java_maicon\\BeyondTheCode-Spring\\src\\main\\resources\\Java.jpg");
+//            FileSystemResource file
+//                    = new FileSystemResource(file1);
+//            mimeMessageHelper.addAttachment(file1.getName(), file);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException e) {

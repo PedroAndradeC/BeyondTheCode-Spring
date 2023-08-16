@@ -1,5 +1,6 @@
 package com.jornada.beyondthecodeapi.controller;
 
+import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.EmailService;
@@ -110,5 +111,10 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void remover(@PathVariable("id") Integer id){
         userService.remover(id);
+    }
+
+    @GetMapping("/listarPaginado")
+    public PaginaDTO<UserDTO> listarPagina (Integer paginaSolicitada, Integer tamanhoPorPagina){
+        return userService.listarPagina(paginaSolicitada,tamanhoPorPagina);
     }
 }

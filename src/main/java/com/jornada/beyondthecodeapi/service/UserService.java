@@ -1,11 +1,14 @@
 package com.jornada.beyondthecodeapi.service;
 
+import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.entity.User;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.UserMapper;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -78,5 +81,15 @@ public class UserService {
     public void remover(Integer id) {
         userRepository.deleteById(id);
     }
-}
 
+    public PaginaDTO<UserDTO> listarPagina(Integer paginaSolicitada, Integer tamanhoPorPagina){
+
+        PageRequest pageRequest = PageRequest.of(paginaSolicitada,tamanhoPorPagina);
+        Page<User> paginaRecuperada = userRepository.findAll(pageRequest);
+
+
+        return new PaginaDTO<>(paginaRecuperada.getTotalElements(),paginaRecuperada.getTotalPages(),paginaSolicitada,tamanhoPorPagina,paginaRecuperada.getContent().stream()
+                .map(entity -> userMapper.toDTO(entity)).toList());
+    }
+
+}
