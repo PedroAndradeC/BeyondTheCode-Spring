@@ -21,8 +21,10 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    private JavaMailSender emailSender;
-    private freemarker.template.Configuration fmConfiguration;
+
+    @SuppressWarnings("java:S2637")
+    private final JavaMailSender emailSender;
+    private final freemarker.template.Configuration fmConfiguration;
     @Value("${spring.mail.username}")
     private String from;
     public void enviarEmailSimples (String emailDestino, String assunto, String texto){

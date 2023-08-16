@@ -1,5 +1,6 @@
 package com.jornada.beyondthecodeapi.controller;
 
+import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.PostService;
@@ -66,4 +67,10 @@ public class PostController {
 //    public boolean remover(@PathVariable("idPost") Integer idPost, Integer idUser) throws RegraDeNegocioException {
 //        return postService.remover(idPost,idUser);
 //    }
+
+    @GetMapping("/listarPostPaginado")
+    public PaginaDTO<PostDTO> listarPagina (Integer paginaSolicita, Integer tamanhoPorPagina){
+        return postService.listarPostPaginado(paginaSolicita,tamanhoPorPagina);
+
+    }
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -82,7 +83,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public PaginaDTO<UserDTO> listarPagina(Integer paginaSolicitada, Integer tamanhoPorPagina){
+    public PaginaDTO<UserDTO> listarUserPagina(Integer paginaSolicitada, Integer tamanhoPorPagina){
 
         PageRequest pageRequest = PageRequest.of(paginaSolicitada,tamanhoPorPagina);
         Page<User> paginaRecuperada = userRepository.findAll(pageRequest);

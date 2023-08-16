@@ -113,8 +113,8 @@ public class UserController {
         userService.remover(id);
     }
 
-    @GetMapping("/listarPaginado")
+    @GetMapping("/listarUserPaginado")
     public PaginaDTO<UserDTO> listarPagina (Integer paginaSolicitada, Integer tamanhoPorPagina){
-        return userService.listarPagina(paginaSolicitada,tamanhoPorPagina);
+        return userService.listarUserPagina(paginaSolicitada,tamanhoPorPagina);
     }
 }

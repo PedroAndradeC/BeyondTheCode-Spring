@@ -1,12 +1,17 @@
 package com.jornada.beyondthecodeapi.service;
 
+import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.entity.Post;
+import com.jornada.beyondthecodeapi.entity.User;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.PostMapper;
 import com.jornada.beyondthecodeapi.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -88,4 +93,14 @@ public class PostService {
     public void remover(Integer id) {
         postRepository.deleteById(id);
     }
+
+    public PaginaDTO<PostDTO> listarPostPaginado(Integer paginaSolicitada, Integer tamanhoPorPagina){
+
+        PageRequest pageRequest = PageRequest.of(paginaSolicitada,tamanhoPorPagina);
+        Page<Post> paginaRecuperada = postRepository.findAll(pageRequest);
+
+        return new PaginaDTO<>(paginaRecuperada.getTotalElements(),paginaRecuperada.getTotalPages(),paginaSolicitada,tamanhoPorPagina,paginaRecuperada.getContent().stream()
+                .map(entity -> postMapper.toDTO(entity)).toList());
+    }
+
 }
