@@ -3,6 +3,8 @@ package com.jornada.beyondthecodeapi.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+
 @Entity(name = "Post")
 @Data
 public class Post {
@@ -19,4 +21,8 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private User user;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    private Set<Comments> comments;
 }
+

@@ -13,13 +13,11 @@ public interface UserMapper {
 //        @Mapping(source = "senha", target = "password")
 //        @Mapping(source = "name", target = "name")
         User toEntity(UserDTO dto);
-//        User toEntity(UserRetornoDTO dto);
 
         //Entity para DTO
 //        @Mapping(source = "id", target = "id")
 //        @Mapping(source = "password", target = "senha")
 //        @Mapping(source = "name", target = "name")
         UserDTO toDTO(User entity);
-//        UserDTO toDTO(User entity);
 
 }

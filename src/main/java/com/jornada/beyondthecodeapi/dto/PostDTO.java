@@ -19,9 +19,7 @@ public class PostDTO {
     @NotBlank
     @NotNull
     private String contents;
-    @Schema(description = "Colocar ID do usuário do Post", example = "3")
-    @Positive
-    private UserRetornoDTO user;
 
+    private UserRetornoDTO user;
 }
 

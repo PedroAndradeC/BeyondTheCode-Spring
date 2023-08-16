@@ -1,0 +1,24 @@
+package com.jornada.beyondthecodeapi.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.Set;
+
+@Entity(name = "Comments")
+@Data
+public class Comments {
+    @Id
+    @Column(name = "id_comments")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gerador_comments")
+    @SequenceGenerator(name = "gerador_comments", sequenceName = "comments_seq", allocationSize = 1)
+    private Integer idComment;
+    @Column(name = "conteudo")
+    private String contents;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_post", referencedColumnName = "id_post")
+    private Post post;
+}

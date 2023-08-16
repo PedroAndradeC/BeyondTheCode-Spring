@@ -50,11 +50,12 @@ public class PostService {
         return dtos;
     }
 
-    public PostDTO buscarPorIdDto(Integer id) throws RegraDeNegocioException {
-        Post entity = buscarPorId(id);
-        return postMapper.toDTO(entity);
+    public boolean validarIdPost(Integer id) throws RegraDeNegocioException {
+        if(postRepository.findById(id) == null){
+            throw new RegraDeNegocioException("ID inválido, Post não existe!");
+        }
+        return true;
     }
-
     private Post buscarPorId(Integer id) throws RegraDeNegocioException {
         return postRepository.findById(id)
                 .orElseThrow(()-> new RegraDeNegocioException("Post não existe"));

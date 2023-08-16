@@ -15,10 +15,4 @@ public class PaginaDTO<E> {
     private Integer pagina;
     private Integer tamanho;
     private List<E> elementos;
-
-
-
-
-
-
 }
