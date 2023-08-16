@@ -1,6 +1,5 @@
 package com.jornada.beyondthecodeapi.dto;
 
-import com.jornada.beyondthecodeapi.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +10,7 @@ import lombok.Data;
 public class PostDTO {
     @Schema(description = "Qualquer ID genérico", example = "1")
     @Positive
-    private Integer codigoPost;
+    private Integer idPost;
     @Schema(description = "Colocar titulo do Post", example = "Lorem Ipsum Sit Dolor Amet")
     @NotBlank
     @NotNull
@@ -22,7 +21,7 @@ public class PostDTO {
     private String contents;
     @Schema(description = "Colocar ID do usuário do Post", example = "3")
     @Positive
-    private UserDTO idUser;
+    private UserRetornoDTO user;
 
 }
 

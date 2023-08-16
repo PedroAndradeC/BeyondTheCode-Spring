@@ -8,10 +8,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
         //DTO para Entity
-        @Mapping(source = "codigoPost",target = "idPost")
+//        @Mapping(source = "codigoPost",target = "idPost")
         Post toEntity(PostDTO dto);
 
         //Entity para DTO
-        @Mapping(source = "idPost", target = "codigoPost")
+//        @Mapping(source = "idPost", target = "codigoPost")
         PostDTO toDTO(Post entity);
 }

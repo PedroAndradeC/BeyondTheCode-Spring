@@ -7,6 +7,7 @@ import com.jornada.beyondthecodeapi.mapper.UserMapper;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -19,14 +20,14 @@ public class UserService {
 
     public UserDTO salvarUser(UserDTO userDTO) throws RegraDeNegocioException {
         validarUser(userDTO);
-        emailService.enviarEmailComTemplate(userDTO.getEmail(), "Bem vindo ao BeyondTheCode",userDTO.getNome());
+        emailService.enviarEmailComTemplate(userDTO.getEmail(), "Bem vindo ao BeyondTheCode",userDTO.getName());
         User entidade = userMapper.toEntity(userDTO);
         User salvo = userRepository.save(entidade);
         UserDTO dtoSalvo = userMapper.toDTO(salvo);
         return dtoSalvo;
     }
 
-    public UserDTO atualizarUser(UserDTO userDTO) throws RegraDeNegocioException {
+    public UserDTO atualizarUser(@RequestBody UserDTO userDTO) throws RegraDeNegocioException {
         validarUser(userDTO);
         User entidade = userMapper.toEntity(userDTO);
         User salvo = userRepository.save(entidade);
@@ -37,7 +38,7 @@ public class UserService {
     public UserDTO loginUser(UserDTO login) throws RegraDeNegocioException {
         User userLogin = userRepository.findByEmail(login.getEmail());
 
-        if (userLogin != null && userLogin.getPassword().equals(login.getSenha())) {
+        if (userLogin != null && userLogin.getPassword().equals(login.getPassword())) {
             return userMapper.toDTO(userLogin);
         } else {
             throw new RegraDeNegocioException("Credenciais inválidas.");
@@ -65,6 +66,13 @@ public class UserService {
         }else{
             throw new RegraDeNegocioException("Precisa ser @gmail, @hotmail ou @outlook");
         }
+    }
+
+    public boolean validarIdUser(Integer id) throws RegraDeNegocioException {
+        if(userRepository.findById(id) == null){
+            throw new RegraDeNegocioException("ID inválido, usuário não existe!");
+        }
+        return true;
     }
 
     public void remover(Integer id) {
