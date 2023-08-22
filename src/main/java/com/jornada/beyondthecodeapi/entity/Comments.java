@@ -10,7 +10,7 @@ import java.util.Set;
 @Data
 public class Comments {
     @Id
-    @Column(name = "id_comments")
+    @Column(name = "id_comment")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gerador_comments")
     @SequenceGenerator(name = "gerador_comments", sequenceName = "comments_seq", allocationSize = 1)
     private Integer idComment;
