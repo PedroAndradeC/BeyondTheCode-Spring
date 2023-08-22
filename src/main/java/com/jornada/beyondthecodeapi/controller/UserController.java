@@ -1,6 +1,7 @@
 package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.PaginaDTO;
+import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.EmailService;
@@ -23,7 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@Controller
 @Slf4j
 public class UserController {
     @Value("${ambiente.api.nome}")
@@ -116,5 +116,10 @@ public class UserController {
     @GetMapping("/listarUserPaginado")
     public PaginaDTO<UserDTO> listarPagina (Integer paginaSolicitada, Integer tamanhoPorPagina){
         return userService.listarUserPagina(paginaSolicitada,tamanhoPorPagina);
+    }
+
+    @GetMapping("/relatorio")
+    public List<RelatorioUserPostDTO> gerarRelatorio() {
+        return userService.relatorio();
     }
 }

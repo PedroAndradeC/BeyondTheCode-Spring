@@ -1,6 +1,7 @@
 package com.jornada.beyondthecodeapi.service;
 
 import com.jornada.beyondthecodeapi.dto.PaginaDTO;
+import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.entity.User;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
@@ -93,4 +94,9 @@ public class UserService {
                 .map(entity -> userMapper.toDTO(entity)).toList());
     }
 
+    public List<RelatorioUserPostDTO> relatorio() {
+        return userRepository.buscarUserPostEComments();
+    }
+
 }
+
