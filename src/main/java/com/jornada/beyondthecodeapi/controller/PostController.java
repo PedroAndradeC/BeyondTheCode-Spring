@@ -68,6 +68,11 @@ public class PostController {
 //        return postService.remover(idPost,idUser);
 //    }
 
+    @Operation(summary = "Retorna a paginação", description = "Este processo retorna a paginação de Posts")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Deu certo!"),
+            @ApiResponse(responseCode = "500",description = "Erro do servidor")
+    })
     @GetMapping("/listarPostPaginado")
     public PaginaDTO<PostDTO> listarPagina (Integer paginaSolicita, Integer tamanhoPorPagina){
         return postService.listarPostPaginado(paginaSolicita,tamanhoPorPagina);
