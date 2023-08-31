@@ -1,5 +1,6 @@
 package com.jornada.beyondthecodeapi.service;
 
+import com.jornada.beyondthecodeapi.dto.AutenticacaoDTO;
 import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
@@ -11,10 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -98,5 +99,30 @@ public class UserService {
         return userRepository.buscarUserPostEComments();
     }
 
-}
+    
+    public User validarToken (String token) throws RegraDeNegocioException{
+        if(token == null){
+            throw new RegraDeNegocioException("Token inválido!");
+        }
+
+        String tokenClean = token.replace("Bearer", "");
+        String[] userAndPassword = tokenClean.split("-");
+
+        Optional<User> userEntityOptional = userRepository.findByLoginAndSenha(userAndPassword[0],userAndPassword[1]);
+
+        return userEntityOptional.orElseThrow(() -> new RegraDeNegocioException("Usuário e/ou senha inválidos!"));
+    }
+
+    public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException {
+
+        Optional<User> usuarioEntityOptional = userRepository.findByLoginAndSenha(autenticacaoDTO.getEmail(), autenticacaoDTO.getSenha());
+
+        if(usuarioEntityOptional.isEmpty()){
+            throw new RegraDeNegocioException("Usuario ou senha inválidos!");
+        }
+        User usuario = usuarioEntityOptional.get();
+        String tokenGerado = usuario.getEmail() + "-" + usuario.getPassword();
+
+        return tokenGerado;
+}}
 
