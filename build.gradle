@@ -23,21 +23,25 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	//lombok
+	// Lombok
 	implementation 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	//map struct
+	// Map struct
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-	// data spring
+	// Data spring
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.oracle.database.jdbc:ojdbc8'
 
-	//mail
+	// Mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+
+	// Spring Security
+	implementation "org.springframework.boot:spring-boot-starter-security"
+	testImplementation('org.springframework.security:spring-security-test')
 }
 
 tasks.named('test') {
