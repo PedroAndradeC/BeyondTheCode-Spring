@@ -113,11 +113,21 @@ public class UserController {
         userService.remover(id);
     }
 
+    @Operation(summary = "Retorna a paginação de User", description = "Este processo retorna a paginação de User")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Deu certo!"),
+            @ApiResponse(responseCode = "500",description = "Erro do servidor")
+    })
     @GetMapping("/listarUserPaginado")
     public PaginaDTO<UserDTO> listarPagina (Integer paginaSolicitada, Integer tamanhoPorPagina){
         return userService.listarUserPagina(paginaSolicitada,tamanhoPorPagina);
     }
 
+    @Operation(summary = "Retorna a paginação o Relatório (Consulsta Personalizada)", description = "Este processo retorna a paginação de User")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Deu certo!"),
+            @ApiResponse(responseCode = "500",description = "Erro do servidor")
+    })
     @GetMapping("/relatorio")
     public List<RelatorioUserPostDTO> gerarRelatorio() {
         return userService.relatorio();
