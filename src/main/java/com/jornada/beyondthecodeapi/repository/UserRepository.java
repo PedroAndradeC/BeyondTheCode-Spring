@@ -4,6 +4,7 @@ import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
 import com.jornada.beyondthecodeapi.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
