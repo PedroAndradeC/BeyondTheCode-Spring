@@ -1,6 +1,7 @@
 package com.jornada.beyondthecodeapi.security;
 
 import com.jornada.beyondthecodeapi.controller.UserController;
+import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.entity.User;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.UserService;
@@ -28,14 +29,8 @@ public class TokenAuthenticatonFilter extends OncePerRequestFilter {
 
         String tokenBearer = request.getHeader("Authorization");
         // Validação de TOKEN
-        try {
-            User userEntity = userService.validarToken(tokenBearer);
-            UsernamePasswordAuthenticationToken tokenSpring = new UsernamePasswordAuthenticationToken(userEntity,
-                    null, Collections.emptyList());
+            UsernamePasswordAuthenticationToken tokenSpring = userService.validarToken(tokenBearer);
             SecurityContextHolder.getContext().setAuthentication(tokenSpring); // Logado!
-        } catch (RegraDeNegocioException e){
-            SecurityContextHolder.getContext().setAuthentication(null); // Não está logado!
-        }
 
         filterChain.doFilter(request,response);
 

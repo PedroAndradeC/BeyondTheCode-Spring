@@ -1,6 +1,7 @@
 package com.jornada.beyondthecodeapi.repository;
 
 import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
+import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +26,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "     left join p.comments c ")
     List<RelatorioUserPostDTO> buscarUserPostEComments();
 
-    Optional<User> findByLoginAndSenha(String login, String senha);
+    Optional<User> findByLogin(String email);
 
 }
 
