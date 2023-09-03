@@ -11,6 +11,7 @@ import com.jornada.beyondthecodeapi.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
@@ -80,6 +81,41 @@ public class UserService {
         }
     }
 
+    public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException {
+
+        UsernamePasswordAuthenticationToken dtoSpring = new UsernamePasswordAuthenticationToken(
+                autenticacaoDTO.getEmail(),
+                autenticacaoDTO.getSenha()
+        );
+
+        try {
+            Authentication autenticacao = authenticationManager.authenticate(dtoSpring);
+
+            Object usuarioAutenticado = autenticacao.getPrincipal();
+            UserDTO userDTO = (UserDTO) usuarioAutenticado;
+
+
+
+            Date dataAtual = new Date();
+            Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
+
+            // ['cargo1, cargo2, cargo3']
+            // 1 dia
+            String jwtGerado = Jwts.builder()
+                    .setIssuer("beyondethecode-api")
+                    .setSubject(userDTO.getId().toString())
+                    .setIssuedAt(dataAtual)
+                    .setExpiration(dataExpiracao)
+                    .signWith(SignatureAlgorithm.HS256, secret)
+                    .compact();
+
+            return jwtGerado;
+
+        } catch (AuthenticationException ex) {
+            throw new RegraDeNegocioException("Usuario e senha inválidos");
+        }
+    }
+
     public UserDTO idUser(Integer id) throws RegraDeNegocioException {
         User entity = buscarIdUser(id);
         return userMapper.toDTO(entity);
@@ -128,7 +164,6 @@ public class UserService {
         return userRepository.buscarUserPostEComments();
     }
 
-
     public UsernamePasswordAuthenticationToken validarToken(String token){
         if (token == null) {
             return null;
@@ -152,44 +187,9 @@ public class UserService {
         return tokenSpring;
 
     }
-
     public Optional<User> findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 
-    public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException {
-
-        UsernamePasswordAuthenticationToken dtoSpring = new UsernamePasswordAuthenticationToken(
-                autenticacaoDTO.getEmail(),
-                autenticacaoDTO.getSenha()
-        );
-
-        try {
-            Authentication autenticacao = authenticationManager.authenticate(dtoSpring);
-
-            Object usuarioAutenticado = autenticacao.getPrincipal();
-            UserDTO userDTO = (UserDTO) usuarioAutenticado;
-
-
-
-            Date dataAtual = new Date();
-            Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
-
-            // ['cargo1, cargo2, cargo3']
-            // 1 dia
-            String jwtGerado = Jwts.builder()
-                    .setIssuer("beyondethecode-api")
-                    .setSubject(userDTO.getId().toString())
-                    .setIssuedAt(dataAtual)
-                    .setExpiration(dataExpiracao)
-                    .signWith(SignatureAlgorithm.HS256, secret)
-                    .compact();
-
-            return jwtGerado;
-
-        } catch (AuthenticationException ex) {
-            throw new RegraDeNegocioException("Usuario e senha inválidos");
-        }
-    }
 }
 

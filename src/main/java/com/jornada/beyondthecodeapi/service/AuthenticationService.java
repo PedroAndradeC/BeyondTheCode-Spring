@@ -1,7 +1,7 @@
 package com.jornada.beyondthecodeapi.service;
 
+import com.jornada.beyondthecodeapi.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +18,7 @@ public class AuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> usuarioEntityOptional = usuarioService.findByLogin(username);
         if (usuarioEntityOptional.isPresent()){
-            return usuarioEntityOptional.get();
+            return (UserDetails) usuarioEntityOptional.get();
         }throw new UsernameNotFoundException("Usuario não encontrado");
     }
 
