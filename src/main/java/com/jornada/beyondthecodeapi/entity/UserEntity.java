@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity(name = "usuario")
 @Data
-public class User{
+public class UserEntity {
     @Id
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gerador_user")
@@ -27,6 +27,6 @@ public class User{
 
     // um user para muitos posts
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private Set<Post> posts;
+    private Set<PostEntity> postEntities;
 
 }

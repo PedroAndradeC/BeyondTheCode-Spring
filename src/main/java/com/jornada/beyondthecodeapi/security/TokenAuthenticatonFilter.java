@@ -1,9 +1,5 @@
 package com.jornada.beyondthecodeapi.security;
 
-import com.jornada.beyondthecodeapi.controller.UserController;
-import com.jornada.beyondthecodeapi.dto.UserDTO;
-import com.jornada.beyondthecodeapi.entity.User;
-import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,7 +12,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 
 import java.io.IOException;
-import java.util.Collections;
 
 @RequiredArgsConstructor
 public class TokenAuthenticatonFilter extends OncePerRequestFilter {

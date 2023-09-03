@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Set;
-
 @Entity(name = "Comments")
 @Data
-public class Comments {
+public class CommentsEntity {
     @Id
     @Column(name = "id_comment")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gerador_comments")
@@ -20,5 +18,5 @@ public class Comments {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_post", referencedColumnName = "id_post")
-    private Post post;
+    private PostEntity postEntity;
 }

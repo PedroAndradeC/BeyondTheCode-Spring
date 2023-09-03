@@ -1,7 +1,6 @@
 package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.AutenticacaoDTO;
-import com.jornada.beyondthecodeapi.entity.User;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;

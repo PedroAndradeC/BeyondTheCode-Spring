@@ -4,16 +4,13 @@ import com.jornada.beyondthecodeapi.dto.AutenticacaoDTO;
 import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
-import com.jornada.beyondthecodeapi.entity.User;
+import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.UserMapper;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,25 +54,25 @@ public class UserService {
     public UserDTO salvarUser(UserDTO userDTO) throws RegraDeNegocioException {
         validarUser(userDTO);
         emailService.enviarEmailComTemplate(userDTO.getEmail(), "Bem vindo ao BeyondTheCode", userDTO.getName());
-        User entidade = userMapper.toEntity(userDTO);
-        User salvo = userRepository.save(entidade);
+        UserEntity entidade = userMapper.toEntity(userDTO);
+        UserEntity salvo = userRepository.save(entidade);
         UserDTO dtoSalvo = userMapper.toDTO(salvo);
         return dtoSalvo;
     }
 
     public UserDTO atualizarUser(@RequestBody UserDTO userDTO) throws RegraDeNegocioException {
         validarUser(userDTO);
-        User entidade = userMapper.toEntity(userDTO);
-        User salvo = userRepository.save(entidade);
+        UserEntity entidade = userMapper.toEntity(userDTO);
+        UserEntity salvo = userRepository.save(entidade);
         UserDTO dtoSalvo = userMapper.toDTO(salvo);
         return dtoSalvo;
     }
 
     public UserDTO loginUser(UserDTO login) throws RegraDeNegocioException {
-        User userLogin = userRepository.findByEmail(login.getEmail());
+        UserEntity userEntityLogin = userRepository.findByEmail(login.getEmail());
 
-        if (userLogin != null && userLogin.getPassword().equals(login.getPassword())) {
-            return userMapper.toDTO(userLogin);
+        if (userEntityLogin != null && userEntityLogin.getPassword().equals(login.getPassword())) {
+            return userMapper.toDTO(userEntityLogin);
         } else {
             throw new RegraDeNegocioException("Credenciais inválidas.");
         }
@@ -117,18 +114,18 @@ public class UserService {
     }
 
     public UserDTO idUser(Integer id) throws RegraDeNegocioException {
-        User entity = buscarIdUser(id);
+        UserEntity entity = buscarIdUser(id);
         return userMapper.toDTO(entity);
     }
 
-    public User buscarIdUser(Integer id) throws RegraDeNegocioException {
+    public UserEntity buscarIdUser(Integer id) throws RegraDeNegocioException {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não existe."));
     }
 
     public List<UserDTO> listar() {
-        List<User> listaUsers = userRepository.findAll();
-        List<UserDTO> dtos = listaUsers.stream().map(entity -> userMapper.toDTO(entity)).toList();
+        List<UserEntity> listaUserEntities = userRepository.findAll();
+        List<UserDTO> dtos = listaUserEntities.stream().map(entity -> userMapper.toDTO(entity)).toList();
         return dtos;
     }
 
@@ -153,7 +150,7 @@ public class UserService {
     public PaginaDTO<UserDTO> listarUserPagina(Integer paginaSolicitada, Integer tamanhoPorPagina) {
 
         PageRequest pageRequest = PageRequest.of(paginaSolicitada, tamanhoPorPagina);
-        Page<User> paginaRecuperada = userRepository.findAll(pageRequest);
+        Page<UserEntity> paginaRecuperada = userRepository.findAll(pageRequest);
 
 
         return new PaginaDTO<>(paginaRecuperada.getTotalElements(), paginaRecuperada.getTotalPages(), paginaSolicitada, tamanhoPorPagina, paginaRecuperada.getContent().stream()
@@ -187,7 +184,7 @@ public class UserService {
         return tokenSpring;
 
     }
-    public Optional<User> findByLogin(String login) {
+    public Optional<UserEntity> findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 

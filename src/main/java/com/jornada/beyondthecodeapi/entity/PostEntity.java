@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity(name = "Post")
 @Data
-public class Post {
+public class PostEntity {
     @Id
     @Column(name = "id_post")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gerador_post")
@@ -20,9 +20,9 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
-    private User user;
+    private UserEntity userEntity;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
-    private Set<Comments> comments;
+    private Set<CommentsEntity> comments;
 }
 

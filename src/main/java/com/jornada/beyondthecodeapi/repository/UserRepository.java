@@ -1,19 +1,17 @@
 package com.jornada.beyondthecodeapi.repository;
 
 import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
-import com.jornada.beyondthecodeapi.dto.UserDTO;
-import com.jornada.beyondthecodeapi.entity.User;
+import com.jornada.beyondthecodeapi.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-    User findByEmail(String email);
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+    UserEntity findByEmail(String email);
 
     @Query("      Select new com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO(u.id," +
             "           u.name," +
@@ -26,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "     left join p.comments c ")
     List<RelatorioUserPostDTO> buscarUserPostEComments();
 
-    Optional<User> findByLogin(String email);
+    Optional<UserEntity> findByLogin(String email);
 
 }
 
