@@ -1,6 +1,8 @@
 package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.AutenticacaoDTO;
+import com.jornada.beyondthecodeapi.dto.UserDTO;
+import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +23,9 @@ public class AutenticacaoController {
         return userService.fazerLogin(autenticacaoDTO);
     }
 
-//    @GetMapping("/usuario-logado")
-//    public User recuperarUsuarioLogado() throws RegraDeNegocioException {
-//        return userService.recuperarUsuarioLogado();
-//    }
+    @GetMapping("/usuario-logado")
+    public UserDTO recuperarUsuarioLogado() throws RegraDeNegocioException {
+        return userService.recuperarUsuarioLogado();
+    }
 
 }

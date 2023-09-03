@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import io.jsonwebtoken.Jwts;
@@ -178,12 +179,24 @@ public class UserService {
 
         UsernamePasswordAuthenticationToken tokenSpring = new UsernamePasswordAuthenticationToken(idUsuario,null);
 
-
-
 //        return userDTOOptional.orElseThrow(() -> new RegraDeNegocioException("Usuário e/ou senha inválidos!"));
         return tokenSpring;
 
     }
+
+    public Integer recuperarIdUsuarioLogado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object idUsuario = authentication.getPrincipal();
+        String idUsuarioString = (String) idUsuario;
+        return Integer.parseInt(idUsuarioString);
+    }
+
+    public UserDTO recuperarUsuarioLogado() throws RegraDeNegocioException {
+        Integer idUsuarioLogado = recuperarIdUsuarioLogado();
+        UserEntity entity = userRepository.findById(idUsuarioLogado).orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
+        return userMapper.toDTO(entity);
+    }
+
     public Optional<UserEntity> findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
