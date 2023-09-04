@@ -20,11 +20,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
             "           c.idComment," +
             "           c.contents)" +
             "     from usuario u " +
-            "     left join u.posts p " +
+            "     left join u.post p " +
             "     left join p.comments c ")
     List<RelatorioUserPostDTO> buscarUserPostEComments();
 
-    Optional<UserEntity> findByLogin(String email);
+    UserEntity findByEmailAndPassword(String email, String password);
 
 }
 

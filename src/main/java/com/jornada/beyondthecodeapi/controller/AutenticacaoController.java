@@ -7,6 +7,7 @@ import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,6 @@ public class AutenticacaoController {
     // Login + token
     public final UserService userService;
 
-    @Bean
     @PostMapping("/login")
     public String fazerLogin(@RequestBody AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException{
         return userService.fazerLogin(autenticacaoDTO);
