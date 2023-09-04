@@ -26,7 +26,7 @@ public class UserEntity {
     private String email;
 
     // um user para muitos posts
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userEntity")
     private Set<PostEntity> postEntities;
 
 }

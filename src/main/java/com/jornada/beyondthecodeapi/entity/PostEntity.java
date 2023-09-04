@@ -22,7 +22,7 @@ public class PostEntity {
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private UserEntity userEntity;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "postEntity")
     private Set<CommentsEntity> comments;
 }
 
