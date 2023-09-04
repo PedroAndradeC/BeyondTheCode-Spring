@@ -11,7 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
-    UserEntity findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByEmailAndPassword(String email, String password);
 
     @Query("      Select new com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO(u.id," +
             "           u.name," +
@@ -20,11 +21,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
             "           c.idComment," +
             "           c.contents)" +
             "     from usuario u " +
-            "     left join u.post p " +
+            "     left join u.posts p " +
             "     left join p.comments c ")
     List<RelatorioUserPostDTO> buscarUserPostEComments();
-
-    UserEntity findByEmailAndPassword(String email, String password);
 
 }
 

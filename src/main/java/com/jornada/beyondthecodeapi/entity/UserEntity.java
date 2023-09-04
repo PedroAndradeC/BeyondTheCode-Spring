@@ -28,6 +28,6 @@ public class UserEntity {
     // um user para muitos posts
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userEntity")
-    private Set<PostEntity> postEntities;
+    private Set<PostEntity> posts;
 
 }

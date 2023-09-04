@@ -54,22 +54,22 @@ public class UserController {
         this.emailService.enviarEmailComTemplate(para, assunto, nome);
     }
 
-    @Operation(summary = "Realiza o login do Usuário", description = "Este processo realiza o login de Usuário já existente")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",description = "Deu certo!"),
-            @ApiResponse(responseCode = "400",description = "Erro na validação de dados"),
-            @ApiResponse(responseCode = "500",description = "Erro do servidor")
-    })
-    @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) throws RegraDeNegocioException {
-        try {
-            UserDTO loggedInUser = userService.loginUser(userDTO);
-            return new ResponseEntity<>(loggedInUser, HttpStatus.OK);
-        } catch (RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Senha e/ou email incorreto(s)");
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Status 401
-        }
-    }
+//    @Operation(summary = "Realiza o login do Usuário", description = "Este processo realiza o login de Usuário já existente")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200",description = "Deu certo!"),
+//            @ApiResponse(responseCode = "400",description = "Erro na validação de dados"),
+//            @ApiResponse(responseCode = "500",description = "Erro do servidor")
+//    })
+//    @PostMapping("/login")
+//    public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) throws RegraDeNegocioException {
+//        try {
+//            UserDTO loggedInUser = userService.loginUser(userDTO);
+//            return new ResponseEntity<>(loggedInUser, HttpStatus.OK);
+//        } catch (RegraDeNegocioException e) {
+//            throw new RegraDeNegocioException("Senha e/ou email incorreto(s)");
+////            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Status 401
+//        }
+//    }
 
     @Operation(summary = "Retorna todos os usuários", description = "Este processo retorna todos os usuários")
     @ApiResponses(value = {

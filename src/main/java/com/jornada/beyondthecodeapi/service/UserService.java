@@ -47,6 +47,12 @@ public class UserService {
 
     }
 
+    @Value("${jwt.validade.token}")
+    private String validadeJWT;
+
+    @Value("${jwt.secret}")
+    private String secret;
+
     public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException {
 
         UsernamePasswordAuthenticationToken dtoSpring = new UsernamePasswordAuthenticationToken(
@@ -64,25 +70,20 @@ public class UserService {
             Date dataAtual = new Date();
             Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
 
-            return Jwts.builder()
-                    .setIssuer("beyondethecode-api")
+            String jwtGerado = Jwts.builder()
+                    .setIssuer("beyondthecode-api")
                     .setSubject(UserEntity.getId().toString())
                     .setIssuedAt(dataAtual)
                     .setExpiration(dataExpiracao)
                     .signWith(SignatureAlgorithm.HS256, secret)
                     .compact();
 
+            return jwtGerado;
+
         } catch (AuthenticationException ex) {
             throw new RegraDeNegocioException("Usuario e senha inválidos");
         }
     }
-
-    @Value("${jwt.validade.token}")
-    private String validadeJWT;
-
-    @Value("${jwt.secret}")
-    private String secret;
-
 
     public UserDTO salvarUser(UserDTO userDTO) throws RegraDeNegocioException {
         validarUser(userDTO);
@@ -101,15 +102,15 @@ public class UserService {
         return dtoSalvo;
     }
 
-    public UserDTO loginUser(UserDTO login) throws RegraDeNegocioException {
-        UserEntity userEntityLogin = userRepository.findByEmail(login.getEmail());
-
-        if (userEntityLogin != null && userEntityLogin.getPassword().equals(login.getPassword())) {
-            return userMapper.toDTO(userEntityLogin);
-        } else {
-            throw new RegraDeNegocioException("Credenciais inválidas.");
-        }
-    }
+//    public UserDTO loginUser(UserDTO login) throws RegraDeNegocioException {
+//        UserEntity userEntityLogin = userRepository.findByEmail(login.getEmail());
+//
+//        if (userEntityLogin != null && userEntityLogin.getPassword().equals(login.getPassword())) {
+//            return userMapper.toDTO(userEntityLogin);
+//        } else {
+//            throw new RegraDeNegocioException("Credenciais inválidas.");
+//        }
+//    }
 
 
 
@@ -196,8 +197,8 @@ public class UserService {
         return userMapper.toDTO(entity);
     }
 
-    public Optional<UserEntity> findByLogin(String login) {
-        return Optional.ofNullable(userRepository.findByEmail(login));
+    public Optional<UserEntity> findByEmail(String login) {
+        return userRepository.findByEmail(login);
     }
 
 }
