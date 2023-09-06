@@ -32,9 +32,9 @@ public class SecurityConfiguration {
         // Permissão de acesso ao "/autenticação"
         http.authorizeHttpRequests((authz)->
                         authz.requestMatchers("/autenticacao/**").permitAll()
-                        .anyRequest().authenticated());
+                             .anyRequest().authenticated());
         // Filtro de autenticação ao Token
-        http.addFilterBefore(new TokenAuthenticatonFilter(userService), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(new TokenAuthenticatonFilter(userService), UsernamePasswordAuthenticationFilter.class);
 
        return http.build(); // Retorna a http (requisição)
     }

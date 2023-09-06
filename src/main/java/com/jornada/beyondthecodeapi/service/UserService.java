@@ -10,6 +10,7 @@ import com.jornada.beyondthecodeapi.mapper.UserMapper;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -30,59 +31,70 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final EmailService emailService;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
-    private final AuthenticationManager authenticationManager;
+//    private final AuthenticationManager authenticationManager;
+//
+//    @Autowired
+//    public UserService(@Lazy UserRepository usuarioRepository, @Lazy AuthenticationManager authenticationManager, @Lazy EmailService emailService, @Lazy UserMapper userMapper) {
+//        this.userRepository = usuarioRepository;
+//        this.authenticationManager = authenticationManager;
+//        this.emailService = emailService;
+//        this.userMapper = userMapper;
+//
+//    }
+//
+//    @Value("${jwt.validade.token}")
+//    private String validadeJWT;
+//
+//    @Value("${jwt.secret}")
+//    private String secret;
 
-    @Autowired
-    public UserService(@Lazy UserRepository usuarioRepository, @Lazy AuthenticationManager authenticationManager, @Lazy EmailService emailService, @Lazy UserMapper userMapper) {
-        this.userRepository = usuarioRepository;
-        this.authenticationManager = authenticationManager;
-        this.emailService = emailService;
-        this.userMapper = userMapper;
-
-    }
-
-    @Value("${jwt.validade.token}")
-    private String validadeJWT;
-
-    @Value("${jwt.secret}")
-    private String secret;
+//    public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException {
+//
+//        UsernamePasswordAuthenticationToken dtoSpring = new UsernamePasswordAuthenticationToken(
+//                autenticacaoDTO.getEmail(),
+//                autenticacaoDTO.getPassword()
+//        );
+//
+//        try {
+//            Authentication autenticacao = authenticationManager.authenticate(dtoSpring);
+//
+//            Object usuarioAutenticado = autenticacao.getPrincipal();
+//            UserEntity UserEntity = (UserEntity) usuarioAutenticado;
+//
+//
+//            Date dataAtual = new Date();
+//            Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
+//
+//            String jwtGerado = Jwts.builder()
+//                    .setIssuer("beyondthecode-api")
+//                    .setSubject(UserEntity.getId().toString())
+//                    .setIssuedAt(dataAtual)
+//                    .setExpiration(dataExpiracao)
+//                    .signWith(SignatureAlgorithm.HS256, secret)
+//                    .compact();
+//
+//            return jwtGerado;
+//
+//        } catch (AuthenticationException ex) {
+//            throw new RegraDeNegocioException("Usuario e senha inválidos");
+//        }
+//    }
 
     public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException {
-
-        UsernamePasswordAuthenticationToken dtoSpring = new UsernamePasswordAuthenticationToken(
-                autenticacaoDTO.getEmail(),
-                autenticacaoDTO.getPassword()
-        );
-
-        try {
-            Authentication autenticacao = authenticationManager.authenticate(dtoSpring);
-
-            Object usuarioAutenticado = autenticacao.getPrincipal();
-            UserEntity UserEntity = (UserEntity) usuarioAutenticado;
-
-
-            Date dataAtual = new Date();
-            Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
-
-            String jwtGerado = Jwts.builder()
-                    .setIssuer("beyondthecode-api")
-                    .setSubject(UserEntity.getId().toString())
-                    .setIssuedAt(dataAtual)
-                    .setExpiration(dataExpiracao)
-                    .signWith(SignatureAlgorithm.HS256, secret)
-                    .compact();
-
-            return jwtGerado;
-
-        } catch (AuthenticationException ex) {
+        Optional<UserEntity> userEntityOptional = userRepository.findByEmailAndPassword(autenticacaoDTO.getEmail(), autenticacaoDTO.getPassword());
+        if (userEntityOptional.isEmpty()) {
             throw new RegraDeNegocioException("Usuario e senha inválidos");
         }
+        UserEntity user = userEntityOptional.get();
+        String tokenGerado = user.getEmail() + "-" + user.getPassword();
+        return tokenGerado;
     }
 
     public UserDTO salvarUser(UserDTO userDTO) throws RegraDeNegocioException {
@@ -162,27 +174,27 @@ public class UserService {
         return userRepository.buscarUserPostEComments();
     }
 
-    public UsernamePasswordAuthenticationToken validarToken(String token){
-        if (token == null) {
-            return null;
-        }
-
-        String tokenClean = token.replace("Bearer ", "");
-        Claims claims = Jwts.parser()
-                .setSigningKey(secret) //utiliza a secret
-                .parseClaimsJws(tokenClean) //decriptografa e valida o token...
-                .getBody(); //recupera o payload
-
-        String idUsuario = claims.getSubject();
-
-//        Optional<User> userDTOOptional = userRepository.findById(Integer.parseInt(idUsuario));
-
-        UsernamePasswordAuthenticationToken tokenSpring = new UsernamePasswordAuthenticationToken(idUsuario,null);
-
-//        return userDTOOptional.orElseThrow(() -> new RegraDeNegocioException("Usuário e/ou senha inválidos!"));
-        return tokenSpring;
-
-    }
+//    public UsernamePasswordAuthenticationToken validarToken(String token){
+//        if (token == null) {
+//            return null;
+//        }
+//
+//        String tokenClean = token.replace("Bearer ", "");
+//        Claims claims = Jwts.parser()
+//                .setSigningKey(secret) //utiliza a secret
+//                .parseClaimsJws(tokenClean) //decriptografa e valida o token...
+//                .getBody(); //recupera o payload
+//
+//        String idUsuario = claims.getSubject();
+//
+////        Optional<User> userDTOOptional = userRepository.findById(Integer.parseInt(idUsuario));
+//
+//        UsernamePasswordAuthenticationToken tokenSpring = new UsernamePasswordAuthenticationToken(idUsuario,null);
+//
+////        return userDTOOptional.orElseThrow(() -> new RegraDeNegocioException("Usuário e/ou senha inválidos!"));
+//        return tokenSpring;
+//
+//    }
 
     public Integer recuperarIdUsuarioLogado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

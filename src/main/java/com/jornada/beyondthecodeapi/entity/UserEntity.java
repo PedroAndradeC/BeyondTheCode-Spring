@@ -3,12 +3,15 @@ package com.jornada.beyondthecodeapi.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Set;
 
 @Entity(name = "usuario")
 @Data
-public class UserEntity {
+public class UserEntity implements UserDetails {
     @Id
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gerador_user")
@@ -30,4 +33,38 @@ public class UserEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userEntity")
     private Set<PostEntity> posts;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

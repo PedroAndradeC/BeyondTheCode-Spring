@@ -1,6 +1,7 @@
-package com.jornada.beyondthecodeapi.service;
+package com.jornada.beyondthecodeapi.security;
 
 import com.jornada.beyondthecodeapi.entity.UserEntity;
+import com.jornada.beyondthecodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
