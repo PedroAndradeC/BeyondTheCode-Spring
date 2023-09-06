@@ -48,44 +48,6 @@ public class UserService {
         this.emailService = emailService;
         this.userMapper = userMapper;
     }
-//
-//    @Value("${jwt.validade.token}")
-//    private String validadeJWT;
-//
-//    @Value("${jwt.secret}")
-//    private String secret;
-
-//    public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException {
-//
-//        UsernamePasswordAuthenticationToken dtoSpring = new UsernamePasswordAuthenticationToken(
-//                autenticacaoDTO.getEmail(),
-//                autenticacaoDTO.getPassword()
-//        );
-//
-//        try {
-//            Authentication autenticacao = authenticationManager.authenticate(dtoSpring);
-//
-//            Object usuarioAutenticado = autenticacao.getPrincipal();
-//            UserEntity UserEntity = (UserEntity) usuarioAutenticado;
-//
-//
-//            Date dataAtual = new Date();
-//            Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
-//
-//            String jwtGerado = Jwts.builder()
-//                    .setIssuer("beyondthecode-api")
-//                    .setSubject(UserEntity.getId().toString())
-//                    .setIssuedAt(dataAtual)
-//                    .setExpiration(dataExpiracao)
-//                    .signWith(SignatureAlgorithm.HS256, secret)
-//                    .compact();
-//
-//            return jwtGerado;
-//
-//        } catch (AuthenticationException ex) {
-//            throw new RegraDeNegocioException("Usuario e senha inválidos");
-//        }
-//    }
 
     @Value("${jwt.validade.token}")
     private String validadeJWT;

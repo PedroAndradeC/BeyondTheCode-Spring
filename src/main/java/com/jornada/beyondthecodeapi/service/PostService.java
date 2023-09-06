@@ -57,36 +57,6 @@ public class PostService {
         return postRepository.findById(id)
                 .orElseThrow(()-> new RegraDeNegocioException("Post não existe"));
     }
-//    public PostDTO autenticarPost(PostDTO post) throws RegraDeNegocioException {
-//        Post postConvertido = postMapper.toEntity(post);
-//
-//        Optional<Post> postOptional = postRepository.findById(postConvertido.getIdPost());
-//
-//        if (postOptional.isPresent()) {
-//            Post postEncontrado = postOptional.get();
-//            if (postEncontrado.getUser() == postConvertido.getUser()) {
-//                return post;
-//            } else {
-//                throw new RegraDeNegocioException("Id Inválido");
-//            }
-//        } else {
-//            throw new RegraDeNegocioException("Post não encontrado");
-//        }
-//    }
-
-//    public PostDTO autenticarPost(PostDTO post) throws RegraDeNegocioException {
-//        Post postConvertido;
-//        int idUsuario;
-//
-//        postConvertido = postMapper.toEntity(post);
-//        idUsuario = postRepository.buscarPostID(postConvertido.getIdPost());
-//        PostDTO postReturn = postMapper.toDTO(postConvertido);
-//        if (idUsuario == post.getIdUser()) {
-//            return post;
-//        } else {
-//            throw new RegraDeNegocioException("Id Inválido");
-//        }
-//    }
 
     public void remover(Integer id) {
         postRepository.deleteById(id);
