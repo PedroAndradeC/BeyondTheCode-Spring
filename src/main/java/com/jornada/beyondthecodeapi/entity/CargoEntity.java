@@ -23,7 +23,7 @@ public class CargoEntity {
     @ManyToMany
     @JoinTable(name = "Usuario_Cargo",
     joinColumns = @JoinColumn(name = "id_cargo"),
-    inverseJoinColumns = @JoinColumn(name = "id_usuario"))
+    inverseJoinColumns = @JoinColumn(name = "id_user"))
     public Set<UserEntity> usuarios;
 
 

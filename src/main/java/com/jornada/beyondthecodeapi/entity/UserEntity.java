@@ -36,7 +36,7 @@ public class UserEntity implements UserDetails {
 
     @ManyToMany
     @JoinTable(name = "Usuario_Cargo",
-            joinColumns = @JoinColumn(name = "id_usuario"),
+            joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_cargo"))
     public Set<CargoEntity> cargos;
 
