@@ -34,6 +34,12 @@ public class UserEntity implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userEntity")
     private Set<PostEntity> posts;
 
+    @ManyToMany
+    @JoinTable(name = "Usuario_Cargo",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_cargo"))
+    public Set<CargoEntity> cargos;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();

@@ -67,11 +67,15 @@ public class UserService {
             Object usuarioAutenticado = autenticacao.getPrincipal();
             UserEntity userEntity = (UserEntity) usuarioAutenticado;
 
+            List<String> nomeDosCargos= userEntity.getCargos().stream()
+                    .map(cargo -> cargo.getNome()).toList();
+
             Date dataAtual = new Date();
             Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
 
             String jwtGerado = Jwts.builder()
                     .setIssuer("beyondthecode-api")
+                    .claim("CARGOS", nomeDosCargos)
                     .setSubject(userEntity.getId().toString())
                     .setIssuedAt(dataAtual)
                     .setExpiration(dataExpiracao)
