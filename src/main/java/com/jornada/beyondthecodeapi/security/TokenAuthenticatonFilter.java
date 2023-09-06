@@ -27,19 +27,11 @@ public class TokenAuthenticatonFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String tokenBearer = request.getHeader("Authorization");
+
 //        // Validação de TOKEN
-        try {
-            UserEntity user = userService.validarToken(tokenBearer);
-            UsernamePasswordAuthenticationToken tokenSpring
-                    = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+            UsernamePasswordAuthenticationToken tokenSpring = userService.validarToken(tokenBearer);
             SecurityContextHolder.getContext().setAuthentication(tokenSpring);
-        } catch (RegraDeNegocioException e) {
-            SecurityContextHolder.getContext().setAuthentication(null);
-        }
-//            UsernamePasswordAuthenticationToken tokenSpring = userService.validarToken(tokenBearer);
-//            SecurityContextHolder.getContext().setAuthentication(tokenSpring); // Logado!
 
         filterChain.doFilter(request,response);
-
     }
 }

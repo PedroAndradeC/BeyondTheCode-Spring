@@ -3,13 +3,14 @@ package com.jornada.beyondthecodeapi.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
 
 @Setter
 @Getter
 @Entity(name="Cargo")
-public class CargoEntity {
+public class CargoEntity implements GrantedAuthority {
 
     @Id
     @Column(name="id_cargo")
@@ -27,4 +28,8 @@ public class CargoEntity {
     public Set<UserEntity> usuarios;
 
 
+    @Override
+    public String getAuthority() {
+        return null;
+    }
 }

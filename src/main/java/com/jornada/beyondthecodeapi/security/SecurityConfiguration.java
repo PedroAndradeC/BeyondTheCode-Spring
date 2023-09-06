@@ -4,6 +4,7 @@ import com.jornada.beyondthecodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -32,7 +33,11 @@ public class SecurityConfiguration {
         // Permissão de acesso ao "/autenticação"
         http.authorizeHttpRequests((authz)->
                         authz.requestMatchers("/autenticacao/**").permitAll()
-                             .anyRequest().authenticated());
+                                .requestMatchers(HttpMethod.POST, "/user/**").hasRole("ADMIN")// apenas o cargo DEV podera fazer DELETE no usuario
+                                .requestMatchers("/user/**").hasAnyRole("COMUM","VERIFICADO","ADMIN")
+                                .requestMatchers("/post/**").hasAnyRole("COMUM","VERIFICADO","ADMIN")
+                                .requestMatchers("/comments/**").hasAnyRole("COMUM","VERIFICADO","ADMIN")
+                                .anyRequest().authenticated());
         // Filtro de autenticação ao Token
         http.addFilterBefore(new TokenAuthenticatonFilter(userService), UsernamePasswordAuthenticationFilter.class);
 

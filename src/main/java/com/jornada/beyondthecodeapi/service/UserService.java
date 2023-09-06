@@ -20,12 +20,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import io.jsonwebtoken.Jwts;
 
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -89,9 +91,9 @@ public class UserService {
         }
     }
 
-    public UserEntity validarToken(String token) throws RegraDeNegocioException {
+    public UsernamePasswordAuthenticationToken validarToken(String token) {
         if (token == null) {
-            throw new RegraDeNegocioException("token inexistente");
+            return null;
         }
         String tokenLimpo = token.replace("Bearer ", "");
 
@@ -100,10 +102,18 @@ public class UserService {
                 .parseClaimsJws(tokenLimpo)
                 .getBody();
 
-        String subject = claims.getSubject();
+        String idUser = claims.getSubject();
+        List<String> cargos = claims.get("CARGOS", List.class);
 
-        Optional<UserEntity> userEntityOptional = userRepository.findById(Integer.parseInt(subject));
-        return userEntityOptional.orElseThrow(() -> new RegraDeNegocioException("Usuário e senha inválidos"));
+        List<SimpleGrantedAuthority> listaDeCargos = cargos.stream()
+                .map(cargoStr -> new SimpleGrantedAuthority(cargoStr))
+                .toList();
+
+        UsernamePasswordAuthenticationToken tokenSpring
+                = new UsernamePasswordAuthenticationToken(idUser, null, listaDeCargos);
+
+//        Optional<UserEntity> userEntityOptional = userRepository.findById(Integer.parseInt(subject));
+        return tokenSpring;
     }
 
 
