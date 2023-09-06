@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final UserService userService;
+    public final UserService userService;
 
     @Bean // Filtro de requisições
     public SecurityFilterChain filterChain(HttpSecurity  http)throws Exception{
@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                         authz.requestMatchers("/autenticacao/**").permitAll()
                              .anyRequest().authenticated());
         // Filtro de autenticação ao Token
-//        http.addFilterBefore(new TokenAuthenticatonFilter(userService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new TokenAuthenticatonFilter(userService), UsernamePasswordAuthenticationFilter.class);
 
        return http.build(); // Retorna a http (requisição)
     }

@@ -31,23 +31,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     private final EmailService emailService;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
 
-//    private final AuthenticationManager authenticationManager;
-//
-//    @Autowired
-//    public UserService(@Lazy UserRepository usuarioRepository, @Lazy AuthenticationManager authenticationManager, @Lazy EmailService emailService, @Lazy UserMapper userMapper) {
-//        this.userRepository = usuarioRepository;
-//        this.authenticationManager = authenticationManager;
-//        this.emailService = emailService;
-//        this.userMapper = userMapper;
-//
-//    }
+    @Autowired
+    public UserService(@Lazy UserRepository usuarioRepository,
+                       @Lazy AuthenticationManager authenticationManager,
+                       @Lazy EmailService emailService,
+                       @Lazy UserMapper userMapper) {
+        this.userRepository = usuarioRepository;
+        this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
+        this.userMapper = userMapper;
+    }
 //
 //    @Value("${jwt.validade.token}")
 //    private String validadeJWT;
@@ -87,15 +87,59 @@ public class UserService {
 //        }
 //    }
 
+    @Value("${jwt.validade.token}")
+    private String validadeJWT;
+
+    @Value("${jwt.secret}")
+    private String secret;
+
+
     public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws RegraDeNegocioException {
-        Optional<UserEntity> userEntityOptional = userRepository.findByEmailAndPassword(autenticacaoDTO.getEmail(), autenticacaoDTO.getPassword());
-        if (userEntityOptional.isEmpty()) {
+        UsernamePasswordAuthenticationToken dtoDoSpring = new UsernamePasswordAuthenticationToken(
+                autenticacaoDTO.getEmail(),
+                autenticacaoDTO.getPassword()
+        );
+        try {
+            Authentication autenticacao = authenticationManager.authenticate(dtoDoSpring);
+
+            Object usuarioAutenticado = autenticacao.getPrincipal();
+            UserEntity userEntity = (UserEntity) usuarioAutenticado;
+
+            Date dataAtual = new Date();
+            Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
+
+            String jwtGerado = Jwts.builder()
+                    .setIssuer("beyondthecode-api")
+                    .setSubject(userEntity.getId().toString())
+                    .setIssuedAt(dataAtual)
+                    .setExpiration(dataExpiracao)
+                    .signWith(SignatureAlgorithm.HS256, secret)
+                    .compact();
+
+            return jwtGerado;
+
+        } catch (AuthenticationException ex) {
             throw new RegraDeNegocioException("Usuario e senha inválidos");
         }
-        UserEntity user = userEntityOptional.get();
-        String tokenGerado = user.getEmail() + "-" + user.getPassword();
-        return tokenGerado;
     }
+
+    public UserEntity validarToken(String token) throws RegraDeNegocioException {
+        if (token == null) {
+            throw new RegraDeNegocioException("token inexistente");
+        }
+        String tokenLimpo = token.replace("Bearer ", "");
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(tokenLimpo)
+                .getBody();
+
+        String subject = claims.getSubject();
+
+        Optional<UserEntity> userEntityOptional = userRepository.findById(Integer.parseInt(subject));
+        return userEntityOptional.orElseThrow(() -> new RegraDeNegocioException("Usuário e senha inválidos"));
+    }
+
 
     public UserDTO salvarUser(UserDTO userDTO) throws RegraDeNegocioException {
         validarUser(userDTO);
@@ -209,8 +253,8 @@ public class UserService {
         return userMapper.toDTO(entity);
     }
 
-    public Optional<UserEntity> findByEmail(String login) {
-        return userRepository.findByEmail(login);
+    public Optional<UserEntity> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
 }
