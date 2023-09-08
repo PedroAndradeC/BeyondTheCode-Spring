@@ -33,7 +33,8 @@ public class SecurityConfiguration {
         // Permissão de acesso ao "/autenticação"
         http.authorizeHttpRequests((authz)->
                         authz.requestMatchers("/autenticacao/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/user/**").hasRole("ADMIN")// apenas o cargo DEV podera fazer DELETE no usuario
+                                .requestMatchers(HttpMethod.POST, "/user/**").hasRole("ADMIN")// apenas ADMIN realizar o POST no User
+                                .requestMatchers(HttpMethod.DELETE, "/user/**").hasRole("ADMIN")
                                 .requestMatchers("/user/**").hasAnyRole("COMUM","VERIFICADO","ADMIN")
                                 .requestMatchers("/post/**").hasAnyRole("COMUM","VERIFICADO","ADMIN")
                                 .requestMatchers("/comments/**").hasAnyRole("COMUM","VERIFICADO","ADMIN")

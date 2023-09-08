@@ -1,5 +1,6 @@
 package com.jornada.beyondthecodeapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class UserDTO {
     @Schema(description = "Colocar senha do usuário", example = "Senha-Segura")
     @NotBlank
     @NotNull
+    @JsonIgnore
     private String password;
     @Schema(description = "Colocar e-mail do usuário", example = "name@gmail.com")
     @NotBlank

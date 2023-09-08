@@ -10,7 +10,6 @@ import com.jornada.beyondthecodeapi.mapper.UserMapper;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -22,11 +21,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import io.jsonwebtoken.Jwts;
 
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -87,7 +88,7 @@ public class UserService {
             return jwtGerado;
 
         } catch (AuthenticationException ex) {
-            throw new RegraDeNegocioException("Usuario e senha inválidos");
+            throw new RegraDeNegocioException("E-mail e/ou senha inválidos");
         }
     }
 
@@ -112,7 +113,6 @@ public class UserService {
         UsernamePasswordAuthenticationToken tokenSpring
                 = new UsernamePasswordAuthenticationToken(idUser, null, listaDeCargos);
 
-//        Optional<UserEntity> userEntityOptional = userRepository.findById(Integer.parseInt(subject));
         return tokenSpring;
     }
 
@@ -121,6 +121,11 @@ public class UserService {
         validarUser(userDTO);
         emailService.enviarEmailComTemplate(userDTO.getEmail(), "Bem vindo ao BeyondTheCode", userDTO.getName());
         UserEntity entidade = userMapper.toEntity(userDTO);
+
+        String senha = entidade.getPassword();
+        String senhaCriptografada = geradorDeSenha(senha);
+        entidade.setPassword(senhaCriptografada);
+
         UserEntity salvo = userRepository.save(entidade);
         UserDTO dtoSalvo = userMapper.toDTO(salvo);
         return dtoSalvo;
@@ -129,22 +134,21 @@ public class UserService {
     public UserDTO atualizarUser(@RequestBody UserDTO userDTO) throws RegraDeNegocioException {
         validarUser(userDTO);
         UserEntity entidade = userMapper.toEntity(userDTO);
+
+        String senha = entidade.getPassword();
+        String senhaCriptografada = geradorDeSenha(senha);
+        entidade.setPassword(senhaCriptografada);
+
         UserEntity salvo = userRepository.save(entidade);
         UserDTO dtoSalvo = userMapper.toDTO(salvo);
         return dtoSalvo;
     }
 
-//    public UserDTO loginUser(UserDTO login) throws RegraDeNegocioException {
-//        UserEntity userEntityLogin = userRepository.findByEmail(login.getEmail());
-//
-//        if (userEntityLogin != null && userEntityLogin.getPassword().equals(login.getPassword())) {
-//            return userMapper.toDTO(userEntityLogin);
-//        } else {
-//            throw new RegraDeNegocioException("Credenciais inválidas.");
-//        }
-//    }
-
-
+    public String geradorDeSenha(String senha) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String senhaCriptografada = bCryptPasswordEncoder.encode(senha);
+        return senhaCriptografada;
+    }
 
     public UserDTO idUser(Integer id) throws RegraDeNegocioException {
         UserEntity entity = buscarIdUser(id);
@@ -185,36 +189,16 @@ public class UserService {
         PageRequest pageRequest = PageRequest.of(paginaSolicitada, tamanhoPorPagina);
         Page<UserEntity> paginaRecuperada = userRepository.findAll(pageRequest);
 
-
-        return new PaginaDTO<>(paginaRecuperada.getTotalElements(), paginaRecuperada.getTotalPages(), paginaSolicitada, tamanhoPorPagina, paginaRecuperada.getContent().stream()
-                .map(entity -> userMapper.toDTO(entity)).toList());
+        return new PaginaDTO<>(paginaRecuperada.getTotalElements(),
+                paginaRecuperada.getTotalPages(),
+                paginaSolicitada,
+                tamanhoPorPagina,
+                paginaRecuperada.getContent().stream().map(entity -> userMapper.toDTO(entity)).toList());
     }
 
     public List<RelatorioUserPostDTO> relatorio() {
         return userRepository.buscarUserPostEComments();
     }
-
-//    public UsernamePasswordAuthenticationToken validarToken(String token){
-//        if (token == null) {
-//            return null;
-//        }
-//
-//        String tokenClean = token.replace("Bearer ", "");
-//        Claims claims = Jwts.parser()
-//                .setSigningKey(secret) //utiliza a secret
-//                .parseClaimsJws(tokenClean) //decriptografa e valida o token...
-//                .getBody(); //recupera o payload
-//
-//        String idUsuario = claims.getSubject();
-//
-////        Optional<User> userDTOOptional = userRepository.findById(Integer.parseInt(idUsuario));
-//
-//        UsernamePasswordAuthenticationToken tokenSpring = new UsernamePasswordAuthenticationToken(idUsuario,null);
-//
-////        return userDTOOptional.orElseThrow(() -> new RegraDeNegocioException("Usuário e/ou senha inválidos!"));
-//        return tokenSpring;
-//
-//    }
 
     public Integer recuperarIdUsuarioLogado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
