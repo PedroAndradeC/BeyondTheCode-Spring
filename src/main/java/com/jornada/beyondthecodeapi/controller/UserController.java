@@ -3,6 +3,7 @@ package com.jornada.beyondthecodeapi.controller;
 import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
+import com.jornada.beyondthecodeapi.dto.UserRetornoDTO;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.EmailService;
 import com.jornada.beyondthecodeapi.service.UserService;
@@ -60,7 +61,7 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @GetMapping
-    public List<UserDTO> retornarTodosOsUsuarios(){
+    public List<UserRetornoDTO> retornarTodosOsUsuarios(){
         return userService.listar();
     }
 

@@ -1,9 +1,6 @@
 package com.jornada.beyondthecodeapi.service;
 
-import com.jornada.beyondthecodeapi.dto.AutenticacaoDTO;
-import com.jornada.beyondthecodeapi.dto.PaginaDTO;
-import com.jornada.beyondthecodeapi.dto.RelatorioUserPostDTO;
-import com.jornada.beyondthecodeapi.dto.UserDTO;
+import com.jornada.beyondthecodeapi.dto.*;
 import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.UserMapper;
@@ -160,9 +157,9 @@ public class UserService {
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não existe."));
     }
 
-    public List<UserDTO> listar() {
+    public List<UserRetornoDTO> listar() {
         List<UserEntity> listaUserEntities = userRepository.findAll();
-        List<UserDTO> dtos = listaUserEntities.stream().map(entity -> userMapper.toDTO(entity)).toList();
+        List<UserRetornoDTO> dtos = listaUserEntities.stream().map(entity -> userMapper.toRetornoDTO(entity)).toList();
         return dtos;
     }
 
