@@ -116,4 +116,16 @@ public class UserController {
     public List<RelatorioUserPostDTO> gerarRelatorio() {
         return userService.relatorio();
     }
+
+    @Operation(summary = "Desativa usuarios", description = "Desativa usuarios")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Deu certo!"),
+            @ApiResponse(responseCode = "400",description = "Erro na validação de dados"),
+            @ApiResponse(responseCode = "500",description = "Erro do servidor")
+    })
+    @PutMapping("/{id}")
+    public void desativar(@PathVariable("id") Integer id) throws RegraDeNegocioException {
+        userService.desativarUsuario(id);
+    }
+
 }

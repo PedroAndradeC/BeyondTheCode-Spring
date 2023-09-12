@@ -29,6 +29,9 @@ public class UserEntity implements UserDetails {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "ativo")
+    private Boolean enabled;
+
     // um user para muitos posts
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userEntity")

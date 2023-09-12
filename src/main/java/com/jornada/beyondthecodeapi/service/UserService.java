@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -81,6 +82,10 @@ public class UserService {
                     .setExpiration(dataExpiracao)
                     .signWith(SignatureAlgorithm.HS256, secret)
                     .compact();
+
+            if(!userEntity.getEnabled()){
+                throw new DisabledException("Usuário desabilitado");
+            }
 
             return jwtGerado;
 
@@ -212,6 +217,12 @@ public class UserService {
 
     public Optional<UserEntity> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public void desativarUsuario(Integer idInformado) throws RegraDeNegocioException {
+        UserEntity entity = userRepository.findById(idInformado).orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
+        entity.setEnabled(false);
+        userRepository.save(entity);
     }
 
 }

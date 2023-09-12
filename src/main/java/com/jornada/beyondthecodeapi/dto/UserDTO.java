@@ -10,19 +10,25 @@ public class UserDTO {
     @Positive
     @Schema(description = "Qualquer ID genérico", example = "1")
     private Integer id;
+
     @Schema(description = "Nome Completo", example = "Fulano de Tal")
     @NotBlank
     @NotNull
     @Size(min = 3, max = 30, message = "Usuário deve conter entre 3 e 30 caracteres")
     private String name;
+
     @Schema(description = "Colocar senha do usuário", example = "Senha-Segura")
     @NotBlank
     @NotNull
     private String password;
+
     @Schema(description = "Colocar e-mail do usuário", example = "name@gmail.com")
     @NotBlank
     @NotNull
     @Email
     private String email;
+
+    private Boolean active;
+
 }
 
