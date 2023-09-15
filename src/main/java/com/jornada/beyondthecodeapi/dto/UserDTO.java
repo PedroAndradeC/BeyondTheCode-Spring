@@ -28,7 +28,5 @@ public class UserDTO {
     @Email
     private String email;
 
-    private Boolean active;
-
 }
 

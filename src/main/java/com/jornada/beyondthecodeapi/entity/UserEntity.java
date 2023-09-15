@@ -74,7 +74,5 @@ public class UserEntity implements UserDetails {
     }
 
     @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    public boolean isEnabled() { return enabled; }
 }

@@ -128,6 +128,8 @@ public class UserService {
         String senhaCriptografada = geradorDeSenha(senha);
         entidade.setPassword(senhaCriptografada);
 
+        entidade.setEnabled(true);
+
         UserEntity salvo = userRepository.save(entidade);
         UserDTO dtoSalvo = userMapper.toDTO(salvo);
         return dtoSalvo;
