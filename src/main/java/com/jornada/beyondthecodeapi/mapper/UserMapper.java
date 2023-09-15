@@ -8,15 +8,9 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
         //DTO para Entity
-//        @Mapping(source = "id", target = "id")
-//        @Mapping(source = "senha", target = "password")
-//        @Mapping(source = "name", target = "name")
         UserEntity toEntity(UserDTO dto);
 
         //Entity para DTO
-//        @Mapping(source = "id", target = "id")
-//        @Mapping(source = "password", target = "senha")
-//        @Mapping(source = "name", target = "name")
         UserDTO toDTO(UserEntity entity);
 
         UserEntity toRetornoEntity(UserRetornoDTO userRetornoDTO);

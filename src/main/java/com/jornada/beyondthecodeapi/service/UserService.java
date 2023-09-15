@@ -226,6 +226,5 @@ public class UserService {
         entity.setEnabled(false);
         userRepository.save(entity);
     }
-
 }
 

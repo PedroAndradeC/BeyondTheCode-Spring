@@ -64,9 +64,6 @@ public class PostController {
     public void remover(@PathVariable("idPost") Integer id) {
         postService.remover(id);
     }
-//    public boolean remover(@PathVariable("idPost") Integer idPost, Integer idUser) throws RegraDeNegocioException {
-//        return postService.remover(idPost,idUser);
-//    }
 
     @Operation(summary = "Retorna a paginação", description = "Este processo retorna a paginação de Posts")
     @ApiResponses(value = {
