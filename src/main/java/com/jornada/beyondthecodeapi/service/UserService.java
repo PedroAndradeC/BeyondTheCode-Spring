@@ -1,9 +1,12 @@
 package com.jornada.beyondthecodeapi.service;
 
 import com.jornada.beyondthecodeapi.dto.*;
+import com.jornada.beyondthecodeapi.entity.CargoEntity;
+import com.jornada.beyondthecodeapi.entity.UserCargoEntity;
 import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.UserMapper;
+import com.jornada.beyondthecodeapi.repository.UserCargoRepository;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,10 +29,7 @@ import io.jsonwebtoken.Jwts;
 
 
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -37,14 +37,17 @@ public class UserService {
     private final EmailService emailService;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final UserCargoRepository userCargoRepository;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
     public UserService(@Lazy UserRepository usuarioRepository,
+                       @Lazy UserCargoRepository userCargoRepository,
                        @Lazy AuthenticationManager authenticationManager,
                        @Lazy EmailService emailService,
                        @Lazy UserMapper userMapper) {
         this.userRepository = usuarioRepository;
+        this.userCargoRepository = userCargoRepository;
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
         this.userMapper = userMapper;
@@ -153,6 +156,25 @@ public class UserService {
         String senhaCriptografada = bCryptPasswordEncoder.encode(senha);
         return senhaCriptografada;
     }
+
+//    private void atualizarCargosUsuario(UserEntity userEntity) {
+//        // Verifique se a lista de cargos é nula e inicialize-a, se necessário
+//        if (userEntity.getCargos() == null) {
+//            userEntity.setCargos(new HashSet<>());
+//        }
+//
+//        // Obtenha os cargos que você deseja adicionar ao usuário (por exemplo, Cargo com ID 3)
+//        Optional<UserCargoEntity> cargo = userCargoRepository.findById(1); // Certifique-se de que você tenha um repository para Cargos
+//
+//        // Verifique se o cargo já não está atribuído ao usuário
+//        if (!userEntity.getCargos().contains(cargo)) {
+//            // Adicione o cargo à lista de cargos do usuário
+//            userEntity.getCargos().add(cargo);
+//
+//            // Atualize o usuário para salvar a relação com o cargo
+//            userRepository.save(userEntity);
+//        }
+//    }
 
     public UserDTO idUser(Integer id) throws RegraDeNegocioException {
         UserEntity entity = buscarIdUser(id);
