@@ -20,5 +20,5 @@ public class CommunityEntity {
 //    @Column(name = "membros_comunidade")
 //    private String membersCommunity;
 
-    private Date creationDate;
+//    private Date creationDate;
 }

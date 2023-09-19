@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
@@ -29,7 +28,7 @@ public class CommunityDTO {
 //    @Schema(description = "Membros da comunidade")
 //    private String membersCommunity;
 
-    @Field(name = "Data de criação")
-    @FutureOrPresent
-    private Date creationDate;
+//    @Field(name = "Data de criação")
+//    @FutureOrPresent
+//    private Date creationDate;
 }
