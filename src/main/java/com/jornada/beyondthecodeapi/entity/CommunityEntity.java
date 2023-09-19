@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 public class CommunityEntity {
     @Id
-    private Integer idCommunity;
+    private String idCommunity;
 
     private String nameCommunity;
 

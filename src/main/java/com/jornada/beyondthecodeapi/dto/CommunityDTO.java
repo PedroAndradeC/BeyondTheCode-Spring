@@ -12,7 +12,7 @@ import java.util.Date;
 public class CommunityDTO {
     @Positive
     @Schema(description = "Qualquer ID genérico", example = "1")
-    private Integer idCommunity;
+    private String idCommunity;
 
     @Schema(description = "Nome da comunidade", example = "DevsJonadas")
     @NotBlank
