@@ -10,7 +10,8 @@ import java.util.Date;
 
 @Data
 public class CommunityDTO {
-    @Positive
+
+    @Field(name = "id")
     @Schema(description = "Qualquer ID genérico", example = "1")
     private String idCommunity;
 

@@ -62,7 +62,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @DeleteMapping
-    public void remover(@PathVariable Integer id) {
+    public void remover(@PathVariable String id) {
         communityService.remover(id);
     }
 }

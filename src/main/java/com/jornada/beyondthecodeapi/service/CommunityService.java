@@ -38,8 +38,7 @@ public class CommunityService {
 
     public List<CommunityDTO> listar() {
         List<CommunityEntity> listaPostEntities = communityRepository.findAll();
-        List<CommunityDTO> dtos = listaPostEntities.stream().map(entity -> communityMapper.toDTO(entity)).collect(Collectors.toList());
-        return dtos;
+        return listaPostEntities.stream().map(communityMapper::toDTO).collect(Collectors.toList());
     }
 //
 //    public boolean validarIdPost(Integer id) throws RegraDeNegocioException {
@@ -48,12 +47,12 @@ public class CommunityService {
 //        }
 //        return true;
 //    }
-    private CommunityEntity buscarPorId(Integer id) throws RegraDeNegocioException {
+    private CommunityEntity buscarPorId(String id) throws RegraDeNegocioException {
         return communityRepository.findById(id)
                 .orElseThrow(()-> new RegraDeNegocioException("Comunidade não existe"));
     }
 
-    public void remover(Integer id) {
+    public void remover(String id) {
         communityRepository.deleteById(id);
     }
 }
