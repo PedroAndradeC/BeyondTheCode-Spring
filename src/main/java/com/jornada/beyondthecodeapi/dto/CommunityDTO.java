@@ -1,17 +1,13 @@
 package com.jornada.beyondthecodeapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Field;
-
-import java.util.Date;
 
 @Data
 public class CommunityDTO {
 
-    @Schema(description = "Qualquer ID genérico", example = "1")
+    @Schema(description = "Qualquer ID genérico", example = "asdf21af5a5s45")
     private String idCommunity;
 
     @Schema(description = "Nome da comunidade", example = "DevsJonadas")
@@ -24,11 +20,4 @@ public class CommunityDTO {
     @NotBlank
     @NotNull
     private String descriptionCommunity;
-
-//    @Schema(description = "Membros da comunidade")
-//    private String membersCommunity;
-
-//    @Field(name = "Data de criação")
-//    @FutureOrPresent
-//    private Date creationDate;
 }

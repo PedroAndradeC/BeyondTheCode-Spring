@@ -40,13 +40,7 @@ public class CommunityService {
         List<CommunityEntity> listaPostEntities = communityRepository.findAll();
         return listaPostEntities.stream().map(communityMapper::toDTO).collect(Collectors.toList());
     }
-//
-//    public boolean validarIdPost(Integer id) throws RegraDeNegocioException {
-//        if(postRepository.findById(id) == null){
-//            throw new RegraDeNegocioException("ID inválido, Post não existe!");
-//        }
-//        return true;
-//    }
+
     private CommunityEntity buscarPorId(String id) throws RegraDeNegocioException {
         return communityRepository.findById(id)
                 .orElseThrow(()-> new RegraDeNegocioException("Comunidade não existe"));

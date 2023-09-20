@@ -2,6 +2,7 @@ package com.jornada.beyondthecodeapi.controller;
 
 import com.jornada.beyondthecodeapi.dto.CommunityDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
+import com.jornada.beyondthecodeapi.entity.CommunityEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,7 +63,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @DeleteMapping
-    public void remover(@PathVariable String id) {
+    public void remover(String id) {
         communityService.remover(id);
     }
 }

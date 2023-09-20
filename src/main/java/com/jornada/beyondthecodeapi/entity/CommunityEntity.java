@@ -2,17 +2,18 @@ package com.jornada.beyondthecodeapi.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
-import java.util.Date;
-import java.util.Set;
-
 @Document(collection = "comunidade")
-@Data
+@Getter
+@Setter
 public class CommunityEntity {
-    @Field(targetType = FieldType.OBJECT_ID)
+//    @Field(targetType = FieldType.OBJECT_ID)
     @Id
     private String idCommunity;
 
@@ -24,4 +25,5 @@ public class CommunityEntity {
 //    private String membersCommunity;
 
 //    private Date creationDate;
+
 }
