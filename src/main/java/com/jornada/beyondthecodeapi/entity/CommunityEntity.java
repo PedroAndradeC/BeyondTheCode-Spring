@@ -19,6 +19,8 @@ public class CommunityEntity {
 
     private String nameCommunity;
 
+    private String communityTopic;
+
     private String descriptionCommunity;
 
 //    @Column(name = "membros_comunidade")
