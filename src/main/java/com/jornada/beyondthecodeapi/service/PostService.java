@@ -58,7 +58,7 @@ public class PostService {
                 .orElseThrow(()-> new RegraDeNegocioException("Post não existe"));
     }
 
-    public void remover(Integer id) {
+    public void remover(Integer id) throws RegraDeNegocioException {
         postRepository.deleteById(id);
     }
 

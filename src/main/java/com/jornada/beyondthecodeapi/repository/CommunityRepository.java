@@ -1,6 +1,5 @@
 package com.jornada.beyondthecodeapi.repository;
 
-import com.jornada.beyondthecodeapi.dto.CommunityDTO;
 import com.jornada.beyondthecodeapi.entity.CommunityEntity;
 import com.jornada.beyondthecodeapi.entity.CommunitysPerTopicEntity;
 import org.springframework.data.mongodb.repository.Aggregation;
