@@ -61,7 +61,7 @@ public class PostController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @DeleteMapping("/{idPost}")
-    public void remover(@PathVariable("idPost") Integer id) {
+    public void remover(@PathVariable("idPost") Integer id) throws RegraDeNegocioException {
         postService.remover(id);
     }
 

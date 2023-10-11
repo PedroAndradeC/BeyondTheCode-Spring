@@ -124,7 +124,7 @@ public class UserService {
 
     public UserDTO salvarUser(UserDTO userDTO) throws RegraDeNegocioException {
         validarUser(userDTO);
-        emailService.enviarEmailComTemplate(userDTO.getEmail(), "Bem vindo ao BeyondTheCode", userDTO.getName());
+//        emailService.enviarEmailComTemplate(userDTO.getEmail(), "Bem vindo ao BeyondTheCode", userDTO.getName());
         UserEntity entidade = userMapper.toEntity(userDTO);
 
         String senha = entidade.getPassword();
@@ -206,8 +206,11 @@ public class UserService {
         return true;
     }
 
-    public void remover(Integer id) {
-        userRepository.deleteById(id);
+    public void remover(Integer id) throws RegraDeNegocioException {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+
+        userRepository.delete(user);
     }
 
     public PaginaDTO<UserDTO> listarUserPagina(Integer paginaSolicitada, Integer tamanhoPorPagina) {

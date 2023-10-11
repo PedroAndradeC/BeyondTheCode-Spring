@@ -1,11 +1,13 @@
 package service;
 
+import com.jornada.beyondthecodeapi.dto.AutenticacaoDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.dto.UserRetornoDTO;
 import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.UserMapper;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
+import com.jornada.beyondthecodeapi.service.EmailService;
 import com.jornada.beyondthecodeapi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,11 +50,26 @@ public class UserServiceTests {
     }
 
     @Test
+    public void deveTestarFazerLoginComSucesso() throws RegraDeNegocioException {
+        // Setup
+        AutenticacaoDTO autenticacaoDTO = new AutenticacaoDTO();
+        UserEntity userEntity = getUserEntity();
+
+        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(userEntity);
+
+        // Act
+        String token = userService.fazerLogin(autenticacaoDTO);
+
+        // Assert
+        assertNotNull(token);
+    }
+
+    @Test
     public void testarSalvarUser() throws RegraDeNegocioException {
 
         // setup
         UserDTO dto = getUserDTO();
-
         UserEntity userEntity = getUserEntity();
 
         // comportamentos
@@ -85,6 +102,18 @@ public class UserServiceTests {
         assertEquals(1, listagem.size());
     }
 
+    @Test
+    public void deveTestarDesativarUsuario() throws RegraDeNegocioException {
+        // Setup
+        UserEntity userEntity = getUserEntity();
+        when(userRepository.findById(1)).thenReturn(Optional.of(userEntity));
+
+        // Act
+        userService.desativarUsuario(1);
+
+        // Assert
+        assertFalse(userEntity.isEnabled());
+    }
 
     @Test
     public void deveRemoverComSucesso() throws RegraDeNegocioException {
@@ -103,7 +132,7 @@ public class UserServiceTests {
 
 
     @Test
-    public void deveTestarRemoverComErro(){
+    public void deveTestarRemoverComErro() throws RegraDeNegocioException{
         //setup
         Optional<UserEntity> usuarioEntityOptional = Optional.empty();
         when(userRepository.findById(anyInt())).thenReturn(usuarioEntityOptional);

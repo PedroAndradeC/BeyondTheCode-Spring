@@ -93,7 +93,7 @@ public class UserController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @DeleteMapping("/{id}")
-    public void remover(@PathVariable("id") Integer id){
+    public void remover(@PathVariable("id") Integer id) throws RegraDeNegocioException{
         userService.remover(id);
     }
 
