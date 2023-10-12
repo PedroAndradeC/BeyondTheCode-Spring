@@ -34,9 +34,6 @@ public class PostServiceTests {
     private PostService postService;
 
     @Mock
-    private UserService userService;
-
-    @Mock
     private PostRepository postRepository;
 
     @Mock

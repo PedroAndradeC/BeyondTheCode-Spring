@@ -1,8 +1,6 @@
 package com.jornada.beyondthecodeapi.service;
 
-import com.jornada.beyondthecodeapi.dto.AutenticacaoDTO;
-import com.jornada.beyondthecodeapi.dto.UserDTO;
-import com.jornada.beyondthecodeapi.dto.UserRetornoDTO;
+import com.jornada.beyondthecodeapi.dto.*;
 import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.UserMapper;
@@ -20,12 +18,16 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,18 +60,10 @@ public class UserServiceTests {
     private SimpleGrantedAuthority simpleGrantedAuthority;
 
     @BeforeEach
-    public  void initJWT() {
-        ReflectionTestUtils.setField(userService, "validadeJWT", "86400000");
-    }
-
-    @BeforeEach
-    public void initJWTSecret() {
-        ReflectionTestUtils.setField(userService, "secret", "MinhaChaveSecreta");
-    }
-
-    @BeforeEach
     public void init() {
         ReflectionTestUtils.setField(userService, "userMapper", userMapper);
+        ReflectionTestUtils.setField(userService, "secret", "MinhaChaveSecreta");
+        ReflectionTestUtils.setField(userService, "validadeJWT", "86400000");
     }
 
     @Test
@@ -96,7 +90,7 @@ public class UserServiceTests {
     @Test
     public void deveTestarValidarTokenComSucesso() {
         //setup
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiZXlvbmR0aGVjb2RlLWFwaSIsIkNBUkdPUyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjUiLCJpYXQiOjE2OTcwNDQ5MzUsImV4cCI6MTY5NzEzMTMzNX0.OUqCQmatNxG5cyeHtK_5zQh3WpmpfcbYpMzPwgaKDow";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiZXlvbmR0aGVjb2RlLWFwaSIsIkNBUkdPUyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjUiLCJpYXQiOjE2OTcxMzUzMDUsImV4cCI6MTY5NzIyMTcwNX0.achQZUbq4mstq_TObF7mQfRkrBWsV1L91ZanENLb8qA";
 
         //act
         UsernamePasswordAuthenticationToken user = userService.validarToken(token);
@@ -144,7 +138,29 @@ public class UserServiceTests {
     }
 
     @Test
-    public void deveTestarDesativarUsuario() throws RegraDeNegocioException {
+    public void deveTestarRelatorioComSucesso(){
+        //setup
+        RelatorioUserPostDTO relatorioUserPostDTO = new RelatorioUserPostDTO();
+        //act
+        userService.relatorio();
+        //assert
+        Assertions.assertNotNull(relatorioUserPostDTO);
+    }
+
+    @Test
+    public void deveTestarFindByEmailComSucesso(){
+        //setup
+        String email = "fulano@gmail.com";
+
+        //act
+        userService.findByEmail(email);
+
+        //assert
+        Assertions.assertNotNull(email);
+    }
+
+    @Test
+    public void deveTestarDesativarUser() throws RegraDeNegocioException {
         // Setup
         UserEntity userEntity = getUserEntity();
         when(userRepository.findById(1)).thenReturn(Optional.of(userEntity));
@@ -154,6 +170,26 @@ public class UserServiceTests {
 
         // Assert
         assertFalse(userEntity.isEnabled());
+    }
+
+    @Test
+    public void deveTestarRecuperarUserLogadoComSucesso() throws RegraDeNegocioException {
+        //setup
+        String name = "fulano";
+        final var userAuthentication = mock(Authentication.class);
+        UserEntity entity = getUserEntity();
+
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("0", null, new ArrayList<>());
+
+        SecurityContextHolder.getContext().setAuthentication(token);
+
+        when(userRepository.findById(any())).thenReturn(Optional.of(entity));
+
+        //act
+        userService.recuperarUsuarioLogado();
+        //assert
+
+        assertNotNull(name);
     }
 
     @Test
@@ -183,6 +219,35 @@ public class UserServiceTests {
             //act
             userService.remover(1);
         });
+    }
+
+    @Test
+    public void deveTestarListarUserPaginaComSucesso() {
+        // Setup
+        PaginaDTO<UserDTO> paginaUserDTO = getPaginaUserDTO();
+        PageRequest pageRequest = PageRequest.of(1, 1);
+
+        List<UserEntity> userEntities = new ArrayList<>();
+
+        when(userRepository.findAll(pageRequest))
+                .thenReturn(new PageImpl<>(userEntities, pageRequest, userEntities.size()));
+        // act
+        PaginaDTO<UserDTO> paginaRecuperada = userService.listarUserPagina(1, 1);
+
+        // assert
+        assertNotNull(paginaRecuperada);
+        assertEquals(paginaUserDTO.getPagina(), paginaRecuperada.getPagina());
+        assertEquals(paginaUserDTO.getTamanho(), paginaRecuperada.getTamanho());
+    }
+
+    private static PaginaDTO getPaginaUserDTO() {
+        var paginaDTO = new PaginaDTO();
+        paginaDTO.setTotalPaginas(2);
+        paginaDTO.setPagina(1);
+        paginaDTO.setTamanho(1);
+        paginaDTO.setElementos(new ArrayList());
+
+        return paginaDTO;
     }
 
     private static UserDTO getUserDTO(){
