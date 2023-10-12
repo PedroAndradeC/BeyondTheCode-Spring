@@ -1,4 +1,4 @@
-package service;
+package com.jornada.beyondthecodeapi.service;
 
 import com.jornada.beyondthecodeapi.dto.AutenticacaoDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
@@ -11,6 +11,8 @@ import com.jornada.beyondthecodeapi.service.EmailService;
 import com.jornada.beyondthecodeapi.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.aspectj.weaver.ast.Var;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,8 +42,6 @@ public class UserServiceTests {
 
     @Mock
     private AuthenticationManager authenticationManager;
-    @Mock
-    private Authentication authentication;
 
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
@@ -74,22 +74,23 @@ public class UserServiceTests {
 
     @Test
     public void deveTestarFazerLoginComSucesso() throws RegraDeNegocioException {
+
         // Setup
         AutenticacaoDTO dto = new AutenticacaoDTO();
-        dto.setEmail("pedroandrade@gmail.com");
+        dto.setEmail("guilhermefrank@gmail.com");
         dto.setPassword("12345");
 
         Authentication userAuthentication = mock(Authentication.class);
         UserEntity userEntity = mock(UserEntity.class);
 
-        when(authenticationManager.authenticate(any())).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn(userEntity);
+        when(authenticationManager.authenticate(any())).thenReturn(userAuthentication);
+        when(userAuthentication.getPrincipal()).thenReturn(userEntity);
 
         // Act
         String autenticacaoDTO = userService.fazerLogin(dto);
 
         // Assert
-        assertNotNull(autenticacaoDTO);
+        Assertions.assertNotNull(autenticacaoDTO);
     }
 
     @Test

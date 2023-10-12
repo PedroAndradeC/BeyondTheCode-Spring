@@ -86,9 +86,6 @@ public class UserService {
                     .signWith(SignatureAlgorithm.HS256, secret)
                     .compact();
 
-            if(!userEntity.getEnabled()){
-                throw new DisabledException("Usuário desabilitado");
-            }
 
             return jwtGerado;
 

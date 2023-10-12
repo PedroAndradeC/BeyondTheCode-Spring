@@ -1,4 +1,4 @@
-package service;
+package com.jornada.beyondthecodeapi.service;
 
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
@@ -48,13 +48,14 @@ public class PostServiceTests {
 
     @Test
     public void TestarSalvarOuAtualizarComSucesso() throws RegraDeNegocioException {
-        //setup
+
+         //setup
 
         PostDTO dto = getPostDTO();
-        PostEntity postEntity = getPostEntity();
+        PostEntity entity = getPostEntity();
 
         //comportamentos
-        when(postRepository.save(any())).thenReturn(postEntity);
+        when(postRepository.save(any())).thenReturn(entity);
         when(postMapper.toDTO(any())).thenReturn(getPostDTO());
 
         //act
