@@ -54,10 +54,6 @@ public class PostService {
         }
         return true;
     }
-    private PostEntity buscarPorId(Integer id) throws RegraDeNegocioException {
-        return postRepository.findById(id)
-                .orElseThrow(()-> new RegraDeNegocioException("Post não existe"));
-    }
 
     public void remover(Integer id) throws RegraDeNegocioException {
         PostEntity post = postRepository.findById(id)
