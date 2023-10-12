@@ -9,6 +9,8 @@ import com.jornada.beyondthecodeapi.mapper.UserMapper;
 import com.jornada.beyondthecodeapi.repository.UserRepository;
 import com.jornada.beyondthecodeapi.service.EmailService;
 import com.jornada.beyondthecodeapi.service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +19,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -44,6 +48,25 @@ public class UserServiceTests {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private Jwts jwts;
+
+    @Mock
+    private Claims claims;
+
+    @Mock
+    private SimpleGrantedAuthority simpleGrantedAuthority;
+
+    @BeforeEach
+    public  void initJWT() {
+        ReflectionTestUtils.setField(userService, "validadeJWT", "86400000");
+    }
+
+    @BeforeEach
+    public void initJWTSecret() {
+        ReflectionTestUtils.setField(userService, "secret", "MinhaChaveSecreta");
+    }
+
     @BeforeEach
     public void init() {
         ReflectionTestUtils.setField(userService, "userMapper", userMapper);
@@ -52,21 +75,38 @@ public class UserServiceTests {
     @Test
     public void deveTestarFazerLoginComSucesso() throws RegraDeNegocioException {
         // Setup
-        AutenticacaoDTO autenticacaoDTO = new AutenticacaoDTO();
-        UserEntity userEntity = getUserEntity();
+        AutenticacaoDTO dto = new AutenticacaoDTO();
+        dto.setEmail("pedroandrade@gmail.com");
+        dto.setPassword("12345");
+
+        Authentication userAuthentication = mock(Authentication.class);
+        UserEntity userEntity = mock(UserEntity.class);
 
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(userEntity);
 
         // Act
-        String token = userService.fazerLogin(autenticacaoDTO);
+        String autenticacaoDTO = userService.fazerLogin(dto);
 
         // Assert
-        assertNotNull(token);
+        assertNotNull(autenticacaoDTO);
     }
 
     @Test
-    public void testarSalvarUser() throws RegraDeNegocioException {
+    public void deveTestarValidarTokenComSucesso() {
+        //setup
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiZXlvbmR0aGVjb2RlLWFwaSIsIkNBUkdPUyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjUiLCJpYXQiOjE2OTcwNDQ5MzUsImV4cCI6MTY5NzEzMTMzNX0.OUqCQmatNxG5cyeHtK_5zQh3WpmpfcbYpMzPwgaKDow";
+
+        //act
+        UsernamePasswordAuthenticationToken user = userService.validarToken(token);
+        //assert
+
+        assertNotNull(token);
+
+    }
+
+    @Test
+    public void testarSalvarOuAtualizarUserComSucesso() throws RegraDeNegocioException {
 
         // setup
         UserDTO dto = getUserDTO();
