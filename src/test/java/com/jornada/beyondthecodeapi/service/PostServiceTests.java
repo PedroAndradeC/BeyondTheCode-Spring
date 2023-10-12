@@ -1,23 +1,24 @@
 package com.jornada.beyondthecodeapi.service;
 
+import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
-import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.dto.UserRetornoDTO;
 import com.jornada.beyondthecodeapi.entity.PostEntity;
 import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.PostMapper;
 import com.jornada.beyondthecodeapi.repository.PostRepository;
-import com.jornada.beyondthecodeapi.service.PostService;
-import com.jornada.beyondthecodeapi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,7 @@ public class PostServiceTests {
     @Test
     public void TestarSalvarOuAtualizarComSucesso() throws RegraDeNegocioException {
 
-         //setup
+        //setup
 
         PostDTO dto = getPostDTO();
         PostEntity entity = getPostEntity();
@@ -81,7 +82,25 @@ public class PostServiceTests {
 
         //assert
         assertNotNull(lista);
-        assertEquals(1,lista.size());
+        assertEquals(1, lista.size());
+    }
+
+    @Test
+    public void deveTestarValidarIdPostComSucesso() throws RegraDeNegocioException {
+        //setup
+        Integer idExistente = 1;
+        Integer idNaoExistente = 2;
+
+        when(postRepository.findById(idExistente)).thenReturn(Optional.of(new PostEntity()));
+        when(postRepository.findById(idNaoExistente)).thenReturn(Optional.empty());
+
+        // assert
+        assertTrue(postService.validarIdPost(idExistente));
+
+        assertThrows(RegraDeNegocioException.class, () -> {
+            // act
+            postService.validarIdPost(idNaoExistente);
+        });
     }
 
     @Test
@@ -99,20 +118,40 @@ public class PostServiceTests {
         //assert
         verify(postRepository, times(1)).delete(any());
     }
+
     @Test
-    public void deveTestarRemoverPostComErro(){
+    public void deveTestarRemoverPostComErro() {
         //setup
         Optional<PostEntity> postEntityOptional = Optional.empty();
         when(postRepository.findById(anyInt())).thenReturn(postEntityOptional);
 
         //assert
-        assertThrows(RegraDeNegocioException.class, ()-> {
+        assertThrows(RegraDeNegocioException.class, () -> {
             // act
             postService.remover(2);
         });
     }
 
-    private static PostEntity getPostEntity(){
+    @Test
+    public void deveTestarListarPostPaginaComSucesso() {
+        // Setup
+        PaginaDTO<PostDTO> paginaPostDTO = getPaginaPostDTO();
+        PageRequest pageRequest = PageRequest.of(1, 1);
+
+        List<PostEntity> postEntities = new ArrayList<>();
+
+        when(postRepository.findAll(pageRequest))
+                .thenReturn(new PageImpl<>(postEntities, pageRequest, postEntities.size()));
+        // act
+        PaginaDTO<PostDTO> paginaRecuperada = postService.listarPostPaginado(1, 1);
+
+        // assert
+        assertNotNull(paginaRecuperada);
+        assertEquals(paginaPostDTO.getPagina(), paginaRecuperada.getPagina());
+        assertEquals(paginaPostDTO.getTamanho(), paginaRecuperada.getTamanho());
+    }
+
+    private static PostEntity getPostEntity() {
         PostEntity postEntity = new PostEntity();
         postEntity.setIdPost(2);
         postEntity.setTitle("BTC");
@@ -121,7 +160,7 @@ public class PostServiceTests {
         return postEntity;
     }
 
-    private static PostDTO getPostDTO(){
+    private static PostDTO getPostDTO() {
         PostDTO dto = new PostDTO();
         dto.setIdPost(2);
         dto.setTitle("BTC");
@@ -129,10 +168,8 @@ public class PostServiceTests {
         dto.setUser(getUserDTO());
         return dto;
     }
-    static UserEntity getUserEntity = getUserEntity();
-    static UserRetornoDTO getUserDTO = getUserDTO();
 
-    private static UserRetornoDTO getUserDTO(){
+    private static UserRetornoDTO getUserDTO() {
         UserRetornoDTO dto = new UserRetornoDTO();
         dto.setId(2);
         dto.setName("Fulano");
@@ -140,13 +177,35 @@ public class PostServiceTests {
         return dto;
     }
 
-    private static UserEntity getUserEntity(){
+    private static UserEntity getUserEntity() {
         UserEntity entity = new UserEntity();
         entity.setId(2);
         entity.setName("Fulano");
-        entity.setPassword("12345");
         entity.setEmail("fulano@gmail.com");
         entity.setEnabled(true);
         return entity;
+    }
+    private static PaginaDTO getPaginaPostDTO() {
+        var paginaDTO = new PaginaDTO();
+        paginaDTO.setTotalPaginas(2);
+        paginaDTO.setPagina(1);
+        paginaDTO.setTamanho(1);
+        paginaDTO.setElementos(new ArrayList());
+
+        PostDTO primeiroPost = new PostDTO();
+        primeiroPost.setIdPost(1);
+        primeiroPost.setTitle("Primeiro post");
+        primeiroPost.setContents("Olá, tudo bem?");
+        primeiroPost.setUser(getUserDTO());
+        paginaDTO.getElementos().add(primeiroPost);
+
+        PostDTO segundoPost = new PostDTO();
+        segundoPost.setIdPost(2);
+        segundoPost.setTitle("De volta");
+        segundoPost.setContents("Olá, estou de volta");
+        segundoPost.setUser(getUserDTO());
+        paginaDTO.getElementos().add(segundoPost);
+
+        return paginaDTO;
     }
 }

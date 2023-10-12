@@ -49,7 +49,7 @@ public class PostService {
     }
 
     public boolean validarIdPost(Integer id) throws RegraDeNegocioException {
-        if(postRepository.findById(id) == null){
+        if(postRepository.findById(id).isEmpty()){
             throw new RegraDeNegocioException("ID inválido, Post não existe!");
         }
         return true;
