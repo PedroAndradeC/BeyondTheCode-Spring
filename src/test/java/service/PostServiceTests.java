@@ -2,6 +2,7 @@ package service;
 
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.dto.UserDTO;
+import com.jornada.beyondthecodeapi.dto.UserRetornoDTO;
 import com.jornada.beyondthecodeapi.entity.PostEntity;
 import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
@@ -50,10 +51,11 @@ public class PostServiceTests {
         //setup
 
         PostDTO dto = getPostDTO();
-        PostEntity entity = getPostEntity();
+        PostEntity postEntity = getPostEntity();
 
         //comportamentos
-        when(postRepository.save(any())).thenReturn(entity);
+        when(postRepository.save(any())).thenReturn(postEntity);
+        when(postMapper.toDTO(any())).thenReturn(getPostDTO());
 
         //act
         PostDTO retorno = postService.salvarPost(dto);
@@ -123,17 +125,16 @@ public class PostServiceTests {
         dto.setIdPost(2);
         dto.setTitle("BTC");
         dto.setContents("Beyond The Code");
-//        dto.setUser(getUserDTO());
+        dto.setUser(getUserDTO());
         return dto;
     }
     static UserEntity getUserEntity = getUserEntity();
-    static UserDTO getUserDTO = getUserDTO();
+    static UserRetornoDTO getUserDTO = getUserDTO();
 
-    private static UserDTO getUserDTO(){
-        UserDTO dto = new UserDTO();
+    private static UserRetornoDTO getUserDTO(){
+        UserRetornoDTO dto = new UserRetornoDTO();
         dto.setId(2);
         dto.setName("Fulano");
-        dto.setPassword("12345");
         dto.setEmail("fulano@gmail.com");
         return dto;
     }
