@@ -18,11 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTests {
@@ -79,6 +80,54 @@ public class PostServiceTests {
         assertNotNull(lista);
         assertEquals(1,lista.size());
     }
+
+    @Test
+    public void deveRemoverPostComSucesso() throws RegraDeNegocioException {
+        //setup
+        PostEntity postEntity = getPostEntity();
+        Optional<PostEntity> postEntityOptional = Optional.of(postEntity);
+
+        when(postRepository.findById(anyInt())).thenReturn(postEntityOptional);
+
+
+        //act
+        postService.remover(2);
+
+        //assert
+        verify(postRepository, times(1)).delete(any());
+    }
+    @Test
+    public void deveTestarRemoverPostComErro(){
+        //setup
+        Optional<PostEntity> postEntityOptional = Optional.empty();
+        when(postRepository.findById(anyInt())).thenReturn(postEntityOptional);
+
+        //assert
+        assertThrows(RegraDeNegocioException.class, ()-> {
+            // act
+            postService.remover(2);
+        });
+    }
+
+    private static PostEntity getPostEntity(){
+        PostEntity postEntity = new PostEntity();
+        postEntity.setIdPost(2);
+        postEntity.setTitle("BTC");
+        postEntity.setContents("Beyond The Code");
+        postEntity.setUserEntity(getUserEntity());
+        return postEntity;
+    }
+
+    private static PostDTO getPostDTO(){
+        PostDTO dto = new PostDTO();
+        dto.setIdPost(2);
+        dto.setTitle("BTC");
+        dto.setContents("Beyond The Code");
+//        dto.setUser(getUserDTO());
+        return dto;
+    }
+    static UserEntity getUserEntity = getUserEntity();
+    static UserDTO getUserDTO = getUserDTO();
 
     private static UserDTO getUserDTO(){
         UserDTO dto = new UserDTO();

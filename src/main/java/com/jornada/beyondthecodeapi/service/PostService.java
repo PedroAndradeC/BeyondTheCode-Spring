@@ -3,6 +3,7 @@ package com.jornada.beyondthecodeapi.service;
 import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.entity.PostEntity;
+import com.jornada.beyondthecodeapi.entity.UserEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.PostMapper;
 import com.jornada.beyondthecodeapi.repository.PostRepository;
@@ -59,7 +60,10 @@ public class PostService {
     }
 
     public void remover(Integer id) throws RegraDeNegocioException {
-        postRepository.deleteById(id);
+        PostEntity post = postRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Post não encontrado"));
+
+        postRepository.delete(post);
     }
 
     public PaginaDTO<PostDTO> listarPostPaginado(Integer paginaSolicitada, Integer tamanhoPorPagina){
