@@ -176,7 +176,7 @@ public class UserServiceTests {
     public void deveTestarRecuperarUserLogadoComSucesso() throws RegraDeNegocioException {
         //setup
         String name = "fulano";
-        final var userAuthentication = mock(Authentication.class);
+        Authentication userAuthentication = mock(Authentication.class);
         UserEntity entity = getUserEntity();
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("0", null, new ArrayList<>());
