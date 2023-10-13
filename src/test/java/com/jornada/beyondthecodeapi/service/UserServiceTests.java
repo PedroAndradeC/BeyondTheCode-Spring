@@ -269,6 +269,19 @@ public class UserServiceTests {
         assertNotNull(userEntity.getPassword());
     }
 
+    @Test
+    public void deveTestarBuscarIdUser(){
+        //setup
+        Integer idUser = 1;
+
+        //act
+        userRepository.findById(idUser);
+
+        //assert
+        assertNotNull(idUser);
+
+    }
+
     private static PaginaDTO getPaginaUserDTO() {
         var paginaDTO = new PaginaDTO();
         paginaDTO.setTotalPaginas(2);
