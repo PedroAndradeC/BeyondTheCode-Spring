@@ -193,6 +193,23 @@ public class UserServiceTests {
     }
 
     @Test
+    public void deveTestarRecuperarIdUsuarioLogadoComSucesso(){
+        //setup
+        Integer idUsuario = 4;
+
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("0", null,
+                new ArrayList<>());
+
+        SecurityContextHolder.getContext().setAuthentication(token);
+
+        //act
+        userService.recuperarIdUsuarioLogado();
+
+        //assert
+        assertNotNull(idUsuario);
+    }
+
+    @Test
     public void deveRemoverComSucesso() throws RegraDeNegocioException {
         //setup
         UserEntity userEntity = getUserEntity();
