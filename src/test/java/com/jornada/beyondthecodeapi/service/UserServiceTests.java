@@ -257,6 +257,18 @@ public class UserServiceTests {
         assertEquals(paginaUserDTO.getTamanho(), paginaRecuperada.getTamanho());
     }
 
+    @Test
+    public void deveTestarGerarSenhaComSucesso(){
+        //setup
+        UserEntity userEntity = getUserEntity();
+
+        //act
+        userService.geradorDeSenha(userEntity.getPassword());
+
+        //assert
+        assertNotNull(userEntity.getPassword());
+    }
+
     private static PaginaDTO getPaginaUserDTO() {
         var paginaDTO = new PaginaDTO();
         paginaDTO.setTotalPaginas(2);
