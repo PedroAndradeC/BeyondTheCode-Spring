@@ -271,6 +271,7 @@ public class UserServiceTests {
 
     @Test
     public void deveTestarBuscarIdUser(){
+
         //setup
         Integer idUser = 1;
 
@@ -279,6 +280,25 @@ public class UserServiceTests {
 
         //assert
         assertNotNull(idUser);
+
+    }
+
+    @Test
+    public void deveTestarValidarUserComSucesso(){
+
+        //setup
+        UserDTO userTeste = new UserDTO();
+        userTeste.setEmail("pedro@gmail.com");
+
+        //act
+        try {
+            userService.validarUser(userTeste);
+        } catch (RegraDeNegocioException e) {
+            throw new RuntimeException(e);
+        }
+
+        //assert
+        assertNotNull(userTeste);
 
     }
 
