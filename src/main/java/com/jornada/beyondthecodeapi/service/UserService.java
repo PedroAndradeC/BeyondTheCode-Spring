@@ -75,7 +75,7 @@ public class UserService {
                     .map(cargo -> cargo.getNome()).toList();
 
             Date dataAtual = new Date();
-            Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT));
+            Date dataExpiracao = new Date(dataAtual.getTime() + Long.parseLong(validadeJWT.trim()));
 
             String jwtGerado = Jwts.builder()
                     .setIssuer("beyondthecode-api")

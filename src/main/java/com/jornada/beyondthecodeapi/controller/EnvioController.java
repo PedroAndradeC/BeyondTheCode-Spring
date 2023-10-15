@@ -1,14 +1,24 @@
 package com.jornada.beyondthecodeapi.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jornada.beyondthecodeapi.dto.PostDTO;
+import com.jornada.beyondthecodeapi.service.ProdutorService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/kafka")
+@RequiredArgsConstructor
 public class EnvioController {
 
-    public void enviarMensagem(String mensagem) {
+    private final ProdutorService produtorService;
 
+    @PostMapping
+    public void enviarMensagem(@RequestBody PostDTO postDTO) throws JsonProcessingException {
+        produtorService.EnviarMensagemAoTopico(postDTO);
     }
 
 }
