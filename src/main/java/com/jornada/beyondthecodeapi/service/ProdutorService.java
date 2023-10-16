@@ -2,6 +2,7 @@ package com.jornada.beyondthecodeapi.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jornada.beyondthecodeapi.dto.CommunityDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +29,17 @@ public class ProdutorService {
 
     private final KafkaTemplate<String,String> kafkaTemplate;
 
-    public void EnviarMensagemAoTopico(PostDTO postDTO) throws JsonProcessingException {
+    public void EnviarMensagemAoTopico(CommunityDTO communityDTO, Integer particao) throws JsonProcessingException {
 
-        String mensagemStr = new ObjectMapper().writeValueAsString(postDTO);
+        String mensagemStr = new ObjectMapper().writeValueAsString(communityDTO);
 
         MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload(mensagemStr)
                 .setHeader(KafkaHeaders.TOPIC, topico)
                 .setHeader(KafkaHeaders.KEY, UUID.randomUUID().toString()); // chave aleatória
+
+        if (particao != null) {
+            stringMessageBuilder.setHeader(KafkaHeaders.PARTITION, particao);
+        }
 
         Message<String> mensagemParaKafka = stringMessageBuilder.build();
         CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(mensagemParaKafka);
@@ -43,10 +48,10 @@ public class ProdutorService {
             @Override
             public void accept(SendResult<String, String> stringStringSendResult, Throwable throwable) {
                 if (throwable != null) {
-                    log.error("ocorreu um erro ao enviar mensagem: {}, exception: {}", postDTO, throwable.getMessage());
+                    log.error("ocorreu um erro ao enviar mensagem: {}, exception: {}", communityDTO, throwable.getMessage());
                 } else {
                     ProducerRecord<String, String> record = stringStringSendResult.getProducerRecord();
-                    log.info("Mensagem enviada com sucesso: {} - {}", record.key(), record.value());
+                    log.info("Descrição da comunidade enviada com sucesso: {} - {}", record.key(), record.value());
                 }
             }
         });

@@ -22,8 +22,5 @@ public class CommunityDTO {
     @Size(min = 3, max = 30, message = "Assunto da comunidade deve conter entre 3 e 30 caracteres")
     private String communityTopic;
 
-    @Schema(description = "Descrição da comunidade", example = "comunidade para devs do jornada tech")
-    @NotBlank
-    @NotNull
-    private String descriptionCommunity;
+    private DescriptionCommunity descriptionCommunity;
 }

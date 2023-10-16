@@ -1,6 +1,7 @@
 package com.jornada.beyondthecodeapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jornada.beyondthecodeapi.dto.CommunityDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.service.ProdutorService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class EnvioController {
     private final ProdutorService produtorService;
 
     @PostMapping
-    public void enviarMensagem(@RequestBody PostDTO postDTO) throws JsonProcessingException {
-        produtorService.EnviarMensagemAoTopico(postDTO);
+    public void enviarMensagem(@RequestBody CommunityDTO communityDTO) throws JsonProcessingException {
+        produtorService.EnviarMensagemAoTopico(communityDTO, communityDTO.getDescriptionCommunity().ordinal());
     }
 
 }
