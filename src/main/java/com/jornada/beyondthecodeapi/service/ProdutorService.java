@@ -3,6 +3,7 @@ package com.jornada.beyondthecodeapi.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jornada.beyondthecodeapi.dto.CommunityDTO;
+import com.jornada.beyondthecodeapi.dto.CommunityLogDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -29,17 +31,13 @@ public class ProdutorService {
 
     private final KafkaTemplate<String,String> kafkaTemplate;
 
-    public void EnviarMensagemAoTopico(CommunityDTO communityDTO, Integer particao) throws JsonProcessingException {
+    public void EnviarMensagemAoTopico(String operacao, CommunityLogDTO logDTO) throws JsonProcessingException {
 
-        String mensagemStr = new ObjectMapper().writeValueAsString(communityDTO);
+        String mensagemStr = new ObjectMapper().writeValueAsString(logDTO);
 
         MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload(mensagemStr)
                 .setHeader(KafkaHeaders.TOPIC, topico)
                 .setHeader(KafkaHeaders.KEY, UUID.randomUUID().toString()); // chave aleatória
-
-        if (particao != null) {
-            stringMessageBuilder.setHeader(KafkaHeaders.PARTITION, particao);
-        }
 
         Message<String> mensagemParaKafka = stringMessageBuilder.build();
         CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(mensagemParaKafka);
@@ -48,10 +46,10 @@ public class ProdutorService {
             @Override
             public void accept(SendResult<String, String> stringStringSendResult, Throwable throwable) {
                 if (throwable != null) {
-                    log.error("ocorreu um erro ao enviar mensagem: {}, exception: {}", communityDTO, throwable.getMessage());
+                    log.error("ocorreu um erro ao enviar mensagem: {}, exception: {}", logDTO, throwable.getMessage());
                 } else {
                     ProducerRecord<String, String> record = stringStringSendResult.getProducerRecord();
-                    log.info("Descrição da comunidade enviada com sucesso: {} - {}", record.key(), record.value());
+                    log.info("Operação: {}, horário: {}, dados: {}", operacao, logDTO.getHorario(), record.value());
                 }
             }
         });

@@ -1,5 +1,6 @@
 package com.jornada.beyondthecodeapi.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jornada.beyondthecodeapi.dto.CommunityDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
 import com.jornada.beyondthecodeapi.entity.CommunityEntity;
@@ -33,7 +34,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PostMapping
-    public CommunityDTO inserirComunidade(@RequestBody @Valid CommunityDTO communityDTO) throws RegraDeNegocioException {
+    public CommunityDTO inserirComunidade(@RequestBody @Valid CommunityDTO communityDTO) throws RegraDeNegocioException, JsonProcessingException {
         log.info("Comunidade foi inserida");
         return communityService.salvarComunidade(communityDTO);
     }
@@ -44,7 +45,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @GetMapping
-    public List<CommunityDTO> retornarTodasComunidades(){
+    public List<CommunityDTO> retornarTodasComunidades() throws JsonProcessingException {
         return communityService.listar();
     }
 
@@ -55,7 +56,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @PutMapping
-    public CommunityDTO atualizarComunidade(@RequestBody @Valid CommunityDTO communityDTO) throws RegraDeNegocioException {
+    public CommunityDTO atualizarComunidade(@RequestBody @Valid CommunityDTO communityDTO) throws RegraDeNegocioException, JsonProcessingException {
         return communityService.atualizarComunidade(communityDTO);
     }
 
@@ -66,7 +67,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "500",description = "Erro do servidor")
     })
     @DeleteMapping
-    public void remover(String id) {
+    public void remover(String id) throws RegraDeNegocioException, JsonProcessingException {
         communityService.remover(id);
     }
 

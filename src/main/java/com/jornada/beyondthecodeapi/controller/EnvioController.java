@@ -17,9 +17,9 @@ public class EnvioController {
 
     private final ProdutorService produtorService;
 
-    @PostMapping
-    public void enviarMensagem(@RequestBody CommunityDTO communityDTO) throws JsonProcessingException {
-        produtorService.EnviarMensagemAoTopico(communityDTO, communityDTO.getDescriptionCommunity().ordinal());
-    }
+//    @PostMapping
+//    public void enviarMensagem(@RequestBody CommunityDTO communityDTO) throws JsonProcessingException {
+//        produtorService.EnviarMensagemAoTopico(communityDTO, communityDTO.getDescriptionCommunity().ordinal());
+//    }
 
 }
