@@ -1,5 +1,6 @@
 package com.jornada.beyondthecodeapi.entity;
 
+import com.jornada.beyondthecodeapi.dto.DescriptionCommunity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class CommunityEntity {
 
     private String communityTopic;
 
-    private String descriptionCommunity;
+    private DescriptionCommunity descriptionCommunity;
 
 //    @Column(name = "membros_comunidade")
 //    private String membersCommunity;
