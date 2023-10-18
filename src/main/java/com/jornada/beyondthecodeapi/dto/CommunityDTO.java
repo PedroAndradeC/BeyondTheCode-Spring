@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public class CommunityDTO {
 
@@ -24,5 +22,5 @@ public class CommunityDTO {
     @Size(min = 3, max = 30, message = "Assunto da comunidade deve conter entre 3 e 30 caracteres")
     private String communityTopic;
 
-    private DescriptionCommunity descriptionCommunity;
+    private OperacaoCommunity operacaoCommunity;
 }

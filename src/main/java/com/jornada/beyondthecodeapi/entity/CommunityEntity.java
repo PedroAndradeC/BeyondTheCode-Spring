@@ -1,14 +1,10 @@
 package com.jornada.beyondthecodeapi.entity;
 
-import com.jornada.beyondthecodeapi.dto.DescriptionCommunity;
-import jakarta.persistence.*;
-import lombok.Data;
+import com.jornada.beyondthecodeapi.dto.OperacaoCommunity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.FieldType;
 
 @Document(collection = "comunidade")
 @Getter
@@ -22,7 +18,7 @@ public class CommunityEntity {
 
     private String communityTopic;
 
-    private DescriptionCommunity descriptionCommunity;
+    private OperacaoCommunity operacaoCommunity;
 
 //    @Column(name = "membros_comunidade")
 //    private String membersCommunity;
