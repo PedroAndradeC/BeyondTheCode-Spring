@@ -20,9 +20,4 @@ public class CommunityEntity {
 
     private OperacaoCommunity operacaoCommunity;
 
-//    @Column(name = "membros_comunidade")
-//    private String membersCommunity;
-
-//    private Date creationDate;
-
 }

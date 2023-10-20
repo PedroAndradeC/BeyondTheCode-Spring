@@ -197,7 +197,7 @@ public class UserService {
     }
 
     public boolean validarIdUser(Integer id) throws RegraDeNegocioException {
-        if (userRepository.findById(id) == null) {
+        if (userRepository.findById(id).isEmpty()) {
             throw new RegraDeNegocioException("ID inválido, usuário não existe!");
         }
         return true;

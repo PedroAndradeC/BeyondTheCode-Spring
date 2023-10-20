@@ -3,6 +3,7 @@ package com.jornada.beyondthecodeapi.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jornada.beyondthecodeapi.dto.CommunityDTO;
 import com.jornada.beyondthecodeapi.dto.CommunityLogDTO;
+import com.jornada.beyondthecodeapi.dto.OperacaoCommunity;
 import com.jornada.beyondthecodeapi.entity.CommunityEntity;
 import com.jornada.beyondthecodeapi.exception.RegraDeNegocioException;
 import com.jornada.beyondthecodeapi.mapper.CommunityMapper;
@@ -75,6 +76,7 @@ public class CommunityService {
         CommunityLogDTO logDTO = new CommunityLogDTO();
         logDTO.setCommunityDTO(communityDTO);
         logDTO.setHorario(new Date());
+        logDTO.setOperacaoCommunity(OperacaoCommunity.valueOf(operacao));
 
         produtorService.EnviarMensagemAoTopico(operacao, logDTO);
     }
