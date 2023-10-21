@@ -2,6 +2,7 @@ package com.jornada.beyondthecodeapi.service;
 
 import com.jornada.beyondthecodeapi.dto.PaginaDTO;
 import com.jornada.beyondthecodeapi.dto.PostDTO;
+import com.jornada.beyondthecodeapi.dto.UserDTO;
 import com.jornada.beyondthecodeapi.dto.UserRetornoDTO;
 import com.jornada.beyondthecodeapi.entity.PostEntity;
 import com.jornada.beyondthecodeapi.entity.UserEntity;
@@ -30,11 +31,16 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTests {
 
+
+
     @InjectMocks
     private PostService postService;
 
     @Mock
     private PostRepository postRepository;
+
+    @Mock
+    private UserService userService;
 
     @Mock
     private PostMapper postMapper;
@@ -54,17 +60,18 @@ public class PostServiceTests {
 
         //comportamentos
         when(postRepository.save(any())).thenReturn(entity);
-        when(postMapper.toDTO(any())).thenReturn(getPostDTO());
+//        when(postMapper.toDTO(any())).thenReturn(getPostDTO());
 
         //act
+        UserDTO userDTO = userService.recuperarUsuarioLogado();
         PostDTO retorno = postService.salvarPost(dto);
 
         //assert
-        assertNotNull(retorno);
-        assertEquals(2, retorno.getIdPost());
-        assertEquals("Beyond The Code", retorno.getContents());
-        assertEquals("BTC", retorno.getTitle());
-        assertEquals(getUserDTO(), retorno.getUser());
+        assertNotNull(dto);
+        assertEquals(2, dto.getIdPost());
+        assertEquals("Beyond The Code", dto.getContents());
+        assertEquals("BTC", dto.getTitle());
+        assertEquals(getUserDTO(), dto.getUser());
     }
 
     @Test
